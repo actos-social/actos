@@ -1,9 +1,9 @@
-const CACHE_NAME = "actos-v7";
+const CACHE_NAME = "actos-v8";
 const ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=0.7",
-  "./app.js?v=0.6",
+  "./styles.css?v=0.8",
+  "./app.js?v=0.8",
   "./manifest.webmanifest",
   "./icon.svg",
 ];

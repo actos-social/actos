@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Actos es una red social donde la gente no sube contenido: sube actos."
+      content="Actos es una red privada donde la gente no sube contenido: sube actos."
     />
     <meta name="theme-color" content="#183f3a" />
     <title>Actos</title>
     <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="stylesheet" href="styles.css?v=0.7" />
+    <link rel="stylesheet" href="styles.css?v=0.8" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="app.js?v=0.8" defer></script>
   </head>
   <body>
     <header class="app-header">
@@ -19,228 +21,237 @@
         <span>Actos</span>
       </a>
       <nav class="top-nav" aria-label="Secciones">
+        <a href="#app">Entrar</a>
         <a href="#como-funciona">Cómo funciona</a>
-        <a href="#circulos">Círculos</a>
-        <a href="#diario">Diario</a>
+        <a href="#espiritu">Criterio</a>
       </nav>
     </header>
 
     <main>
       <section class="hero" id="inicio">
         <div class="hero-copy">
-          <p class="eyebrow">Tiempo, comunidad y cero solemnidad innecesaria</p>
-          <h1>La red social donde la gente no sube contenido: sube actos.</h1>
+          <p class="eyebrow">Privado, humano y sin show</p>
+          <h1>La red donde la gente no sube contenido: sube actos.</h1>
           <p class="hero-text">
-            Actos no es una app para pedir favores gratis. Es una red para ofrecer tiempo
-            cuando alguien atraviesa una necesidad real: orientacion, compania, cuidado,
-            aprendizaje o una puerta que no puede abrir solo. Importante, si. Bajonera, no.
+            Actos conecta personas por necesidades reales: compañía, orientación, autonomía,
+            trámites importantes o momentos que pesan menos con alguien cerca.
           </p>
           <div class="hero-actions">
-            <a class="button primary" href="#participar">Sumarme al piloto</a>
-            <a class="button secondary" href="#diario">Ver actos buenos</a>
+            <a class="button primary" href="#app">Crear mi perfil</a>
+            <a class="button secondary" href="#espiritu">Ver el filtro Actos</a>
           </div>
         </div>
-        <div class="hero-panel" aria-label="Resumen de impacto">
+        <div class="hero-panel" aria-label="Resumen de privacidad">
           <div>
-            <span class="metric">184</span>
-            <span class="metric-label">minutos de cuidado ofrecidos, sin discursos eternos</span>
+            <span class="metric">1</span>
+            <span class="metric-label">perfil privado, recuperable desde cualquier dispositivo</span>
           </div>
           <div>
-            <span class="metric">27</span>
-            <span class="metric-label">necesidades acompanadas con criterio humano</span>
+            <span class="metric">0</span>
+            <span class="metric-label">muros públicos para presumir ayuda</span>
           </div>
           <div>
-            <span class="metric">9</span>
-            <span class="metric-label">círculos chicos, gente real, mate opcional</span>
+            <span class="metric">100%</span>
+            <span class="metric-label">matches con contexto, no favores al voleo</span>
           </div>
         </div>
       </section>
 
-      <section class="manifesto" id="manifiesto">
-        <div class="manifesto-copy">
-          <p class="eyebrow">Manifiesto</p>
-          <h2>No es hacer mandados. Es aparecer cuando algo humano se pone cuesta arriba.</h2>
+      <section class="app-section" id="app">
+        <div class="section-heading compact">
+          <p class="eyebrow">Tu Actos</p>
+          <h2>Entrás con tu mail. Tu acto queda en la nube.</h2>
+          <p>
+            No mostramos teléfono ni mail. Si hay match, se abre un chat dentro de Actos.
+            Simple, privado y sin vidriera.
+          </p>
         </div>
-        <div class="manifesto-points">
-          <p>Actos empieza con una pregunta sencilla: que parte de tu tiempo puede aliviar una necesidad real de otra persona, sin ponerse en modo estatua de plaza.</p>
-          <p>La ayuda no tiene que ser heroica. Puede ser media hora de escucha, una caminata para volver a salir, una explicacion clara o acompanar un tramite importante.</p>
-          <p>La comunidad se vuelve visible cuando deja de medirse en seguidores y empieza a medirse en actos completados. Menos pose. Mas presencia.</p>
+
+        <div class="auth-card" id="authCard">
+          <h3>Entrar o crear cuenta</h3>
+          <p>Te mandamos un enlace al mail. Sin contraseña, sin drama.</p>
+          <form id="authForm" class="stack-form">
+            <label>
+              Mail
+              <input id="authEmail" type="email" placeholder="tu@mail.com" autocomplete="email" required />
+            </label>
+            <button class="button primary full" type="submit">Mandarme el enlace</button>
+          </form>
+          <p class="form-note" id="authStatus"></p>
+        </div>
+
+        <div class="dashboard" id="dashboard" hidden>
+          <aside class="dashboard-side">
+            <p class="eyebrow">Sesión activa</p>
+            <strong id="sessionEmail">Tu cuenta</strong>
+            <button class="button secondary full" id="signOut" type="button">Salir</button>
+          </aside>
+
+          <section class="dashboard-main">
+            <div class="panel-card">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Perfil privado</p>
+                  <h3>Qué podés dar y qué necesitás</h3>
+                </div>
+                <span class="status-pill" id="profileStatus">Sin guardar</span>
+              </div>
+
+              <form id="profileForm" class="profile-grid">
+                <label>
+                  Nombre o apodo
+                  <input id="displayName" type="text" placeholder="Ej. Diego" required />
+                </label>
+                <label>
+                  Zona
+                  <input id="zone" type="text" placeholder="Ej. Morón, Palermo, online" required />
+                </label>
+                <label>
+                  Puedo ofrecer
+                  <select id="offer" required>
+                    <option value="">Elegí una opción</option>
+                    <option value="trabajo">Orientación laboral o entrevistas</option>
+                    <option value="escucha">Escucha o acompañamiento</option>
+                    <option value="tramite">Acompañar un trámite importante</option>
+                    <option value="autonomia">Enseñar algo que dé autonomía</option>
+                    <option value="salir">Acompañar a volver a salir</option>
+                  </select>
+                </label>
+                <label>
+                  Necesito
+                  <select id="need" required>
+                    <option value="">Elegí una opción</option>
+                    <option value="trabajo">Prepararme para buscar trabajo</option>
+                    <option value="escucha">Hablar con alguien sin sentirme solo</option>
+                    <option value="tramite">Afrontar un trámite importante</option>
+                    <option value="autonomia">Aprender algo que me destrabe</option>
+                    <option value="salir">Volver a salir o moverme con compañía</option>
+                  </select>
+                </label>
+                <label>
+                  Disponibilidad
+                  <select id="availability" required>
+                    <option value="">Elegí una opción</option>
+                    <option value="manana">Mañana</option>
+                    <option value="tarde">Tarde</option>
+                    <option value="noche">Noche</option>
+                    <option value="finde">Fin de semana</option>
+                    <option value="flexible">Flexible</option>
+                  </select>
+                </label>
+                <label>
+                  Propósito
+                  <select id="purpose" required>
+                    <option value="">Elegí un propósito</option>
+                    <option value="trabajo">Conseguir trabajo</option>
+                    <option value="acompanamiento">Atravesar algo acompañado</option>
+                    <option value="autonomia">Ganar autonomía</option>
+                    <option value="ciudad">Adaptarme a una ciudad</option>
+                    <option value="barrio">Activar cuidado en mi barrio</option>
+                  </select>
+                </label>
+                <label class="full-span">
+                  Qué hay detrás de esa necesidad
+                  <textarea
+                    id="needStory"
+                    rows="4"
+                    placeholder="Ej. Tengo una entrevista y necesito practicar. / Tengo que hacerme un estudio y me angustia ir solo."
+                    required
+                  ></textarea>
+                </label>
+                <button class="button primary full-span" type="submit">Guardar mi acto</button>
+              </form>
+              <p class="form-note">
+                Filtro Actos: si es salud, autonomía, pertenencia, oportunidad o cuidado, entra.
+                Si es “me da fiaca”, te queremos, pero no va por acá.
+              </p>
+            </div>
+
+            <div class="panel-card">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Matches</p>
+                  <h3>Personas compatibles, no catálogo público</h3>
+                </div>
+                <button class="button secondary" id="refreshMatches" type="button">Actualizar</button>
+              </div>
+              <div class="match-list" id="matchList"></div>
+            </div>
+
+            <div class="panel-card chat-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Chat interno</p>
+                  <h3 id="chatTitle">Sin conversación abierta</h3>
+                </div>
+                <button class="button secondary" id="refreshChat" type="button">Refrescar</button>
+              </div>
+              <div class="message-list" id="messageList">
+                <p class="empty-state">Abrí un match para conversar sin compartir teléfono ni mail.</p>
+              </div>
+              <form id="messageForm" class="message-form">
+                <input id="messageBody" type="text" placeholder="Escribí un mensaje cuidado..." disabled />
+                <button class="button primary" type="submit" disabled id="sendMessage">Enviar</button>
+              </form>
+            </div>
+          </section>
         </div>
       </section>
 
       <section class="ethos-section" id="espiritu">
         <div class="section-heading">
-          <p class="eyebrow">El espiritu, con filtro anti-chamuyo</p>
-          <h2>Actos cuida la diferencia entre comodidad y necesidad.</h2>
+          <p class="eyebrow">El criterio</p>
+          <h2>Privado no significa frío. Significa cuidado.</h2>
         </div>
         <div class="ethos-grid">
           <article class="ethos-yes">
-            <h3>Si entra en Actos</h3>
-            <p>Acompanar a alguien a un estudio medico, ayudar a preparar una entrevista, explicar un tramite esencial, escuchar a alguien que esta solo, ensenar una habilidad que le da autonomia.</p>
+            <h3>Sí entra</h3>
+            <p>Acompañar a un estudio médico, practicar una entrevista, explicar un trámite importante o enseñar algo que dé autonomía.</p>
           </article>
           <article class="ethos-no">
             <h3>Te queremos, pero no</h3>
-            <p>Si es "me olvide el cargador", "me da fiaca ir" o "alguien que me resuelva gratis algo que puedo resolver", probablemente no. Hay amor, pero tambien criterio.</p>
+            <p>“Me olvidé el cargador”, “me da fiaca ir” o “que alguien me resuelva gratis algo que puedo resolver”. Eso no es Actos.</p>
           </article>
           <article class="ethos-rule">
-            <h3>La pregunta guia</h3>
-            <p>Si este acto ayuda a una persona a recuperar calma, dignidad, autonomia, salud, pertenencia u oportunidad, probablemente pertenece a Actos.</p>
+            <h3>La regla simple</h3>
+            <p>Si ayuda a recuperar calma, dignidad, salud, autonomía, pertenencia u oportunidad, probablemente pertenece.</p>
           </article>
         </div>
       </section>
 
       <section class="section" id="como-funciona">
         <div class="section-heading">
-          <p class="eyebrow">Una logica simple, sin tablero de NASA</p>
-          <h2>La app matchea por intención, tiempo y cercanía.</h2>
+          <p class="eyebrow">Cómo funciona</p>
+          <h2>Primero perfil. Después match. Recién ahí chat.</h2>
         </div>
         <div class="steps">
           <article>
             <span class="step-number">01</span>
-            <h3>Decís qué podés dar</h3>
-            <p>Un saber, una escucha, una orientacion o una compania que ayude a sostener una necesidad real. No hace falta capa.</p>
+            <h3>Entrás con mail</h3>
+            <p>Tu cuenta queda guardada y podés volver desde el celu o la compu.</p>
           </article>
           <article>
             <span class="step-number">02</span>
-            <h3>Decís qué necesitás</h3>
-            <p>La necesidad se expresa con contexto humano, no como "che, ya que estas". Ese filtro nos salva a todos.</p>
+            <h3>Cargás tu acto</h3>
+            <p>Qué ofrecés, qué necesitás y por qué importa. Cortito y con contexto.</p>
           </article>
           <article>
             <span class="step-number">03</span>
-            <h3>Entrás a un círculo</h3>
-            <p>Grupos chicos de 21 dias para trabajo, soledad, ciudad nueva, autonomia o apoyo practico. Gente, no multitud.</p>
+            <h3>Actos matchea</h3>
+            <p>Busca compatibilidad por necesidad, oferta, propósito y disponibilidad.</p>
           </article>
           <article>
             <span class="step-number">04</span>
-            <h3>Subís el acto</h3>
-            <p>El diario registra actos de cuidado sin convertirlos en una competencia de likes. Gracias, algoritmo, hoy descansamos.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="split-section" id="participar">
-        <div>
-          <p class="eyebrow">Prototipo funcional</p>
-          <h2>Sumate al primer piloto. Prometemos no hacerte llenar un test eterno.</h2>
-          <p>
-            Deja una necesidad humana concreta. En esta version entra a una mesa de entrada privada
-            del piloto y genera una ficha lista para cuidar el primer contacto. Si lo que pedis es comodidad pura, Actos te va a mirar con ternura y levantar una ceja.
-          </p>
-        </div>
-
-        <form class="match-form" id="matchForm">
-          <label>
-            Nombre o apodo
-            <input id="personName" name="personName" type="text" placeholder="Ej. Diego" required />
-          </label>
-          <label>
-            Puedo ofrecer
-            <select id="offer" name="offer" required>
-              <option value="">Elegí una opción</option>
-              <option value="trabajo">Orientacion laboral o entrevistas</option>
-              <option value="escucha">Escucha o acompanamiento emocional</option>
-              <option value="tramite">Acompanamiento a tramite esencial</option>
-              <option value="autonomia">Ensenar una habilidad para autonomia</option>
-              <option value="salir">Acompanar a volver a salir</option>
-            </select>
-          </label>
-          <label>
-            Necesito
-            <select id="need" name="need" required>
-              <option value="">Elegí una opción</option>
-              <option value="trabajo">Prepararme para buscar trabajo</option>
-              <option value="escucha">Hablar con alguien sin sentirme solo</option>
-              <option value="tramite">Afrontar un tramite importante</option>
-              <option value="autonomia">Aprender algo que me destrabe</option>
-              <option value="salir">Volver a salir o moverme con compania</option>
-            </select>
-          </label>
-          <label>
-            Qué hay detrás de esa necesidad
-            <textarea
-              id="needStory"
-              name="needStory"
-              rows="4"
-              placeholder="Ej. Tengo una entrevista y no se como prepararme. / Necesito ir a un estudio medico y me angustia ir solo. / No: necesito que alguien me haga un favor porque si."
-              required
-            ></textarea>
-          </label>
-          <label>
-            Zona
-            <input id="zone" name="zone" type="text" placeholder="Ej. Palermo, Cordoba, online" required />
-          </label>
-          <label>
-            Disponibilidad
-            <select id="availability" name="availability" required>
-              <option value="">Elegí una opción</option>
-              <option value="manana">Mañana</option>
-              <option value="tarde">Tarde</option>
-              <option value="noche">Noche</option>
-              <option value="finde">Fin de semana</option>
-              <option value="flexible">Flexible</option>
-            </select>
-          </label>
-          <label>
-            Propósito
-            <select id="purpose" name="purpose" required>
-              <option value="">Elegí un propósito</option>
-              <option value="trabajo">Conseguir trabajo</option>
-              <option value="acompanamiento">Atravesar algo acompanado</option>
-              <option value="autonomia">Ganar autonomia</option>
-              <option value="ciudad">Adaptarme a una ciudad</option>
-              <option value="barrio">Activar cuidado en mi barrio</option>
-            </select>
-          </label>
-          <button class="button primary full" type="submit">Ver match sugerido</button>
-          <p class="form-note">
-            Filtro Actos: cuidado, dignidad, autonomia, salud, pertenencia u oportunidad. Si es solo fiaca, igual te bancamos, pero no entra aca.
-          </p>
-        </form>
-      </section>
-
-      <section class="result-section" id="resultado" hidden>
-        <div class="result-card">
-          <p class="eyebrow">Match sugerido</p>
-          <h2 id="resultTitle">Círculo recomendado</h2>
-          <p id="resultText"></p>
-          <div class="share-card" id="shareCard"></div>
-          <div class="result-actions">
-            <button class="button primary" id="saveAct" type="button">Registrar acto</button>
-            <button class="button secondary" id="copyAct" type="button">Copiar ficha</button>
-            <a class="button secondary" href="#circulos">Ver círculos</a>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="actos-iniciales">
-        <div class="section-heading">
-          <p class="eyebrow">Primeros actos posibles</p>
-          <h2>Acciones chicas, impacto real, cero humo.</h2>
-        </div>
-        <div class="act-grid">
-          <article>
-            <strong>Revisar un CV</strong>
-            <p>30 minutos para que alguien llegue a una entrevista con mas calma y mas herramientas.</p>
-          </article>
-          <article>
-            <strong>Acompanamiento a un estudio</strong>
-            <p>Ir con alguien que no quiere atravesar solo una instancia medica o administrativa importante.</p>
-          </article>
-          <article>
-            <strong>Explicar un tramite</strong>
-            <p>Convertir un proceso confuso en tres pasos claros, sin juzgar a quien pide ayuda.</p>
-          </article>
-          <article>
-            <strong>Escuchar sin apurar</strong>
-            <p>Ofrecer presencia a alguien que necesita ordenar lo que le pasa antes de poder actuar.</p>
+            <h3>Se abre chat</h3>
+            <p>No hay muro público. No hay ranking de bondad. Hay conversación cuidada.</p>
           </article>
         </div>
       </section>
 
       <section class="section" id="circulos">
         <div class="section-heading">
-          <p class="eyebrow">Amistad con proposito</p>
-          <h2>Círculos de 21 días para que la ayuda tenga continuidad.</h2>
+          <p class="eyebrow">Círculos posibles</p>
+          <h2>Ayuda concreta, en grupos chicos.</h2>
         </div>
         <div class="circle-grid" id="circleGrid"></div>
       </section>
@@ -248,40 +259,14 @@
       <section class="diary-section" id="diario">
         <div class="section-heading">
           <p class="eyebrow">Diario colectivo</p>
-          <h2>Actos que ya merecen ser contados, sin posar para la foto.</h2>
+          <h2>Historias que inspiran sin convertir la ayuda en show.</h2>
         </div>
         <div class="diary-list" id="diaryList"></div>
-      </section>
-
-      <section class="pilot-section" id="pilotos">
-        <div class="section-heading">
-          <p class="eyebrow">Pilotos iniciales</p>
-          <h2>Arrancar chico para cuidar bien.</h2>
-        </div>
-        <div class="pilot-list">
-          <article>
-            <span>01</span>
-            <strong>Trabajo sin hacerlo solo</strong>
-            <p>Personas buscando empleo + gente que puede revisar CVs, practicar entrevistas o abrir una primera orientacion.</p>
-          </article>
-          <article>
-            <span>02</span>
-            <strong>Atravesar algo acompanado</strong>
-            <p>Turnos, tramites, caminatas de regreso, conversaciones dificiles y momentos que pesan menos con alguien al lado.</p>
-          </article>
-          <article>
-            <span>03</span>
-            <strong>Ciudad nueva</strong>
-            <p>Personas que se mudaron y necesitan lugares, rutinas, compania y pertenencia.</p>
-          </article>
-        </div>
       </section>
     </main>
 
     <footer class="footer">
-      <p>Actos es un concepto abierto y gratuito. Hecho para cuidar necesidades reales, con humanidad, criterio y una sonrisa a tiempo.</p>
+      <p>Actos es gratuito, privado por defecto y pensado para necesidades reales.</p>
     </footer>
-
-    <script src="app.js?v=0.6" defer></script>
   </body>
 </html>
