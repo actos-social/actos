@@ -83,6 +83,9 @@ const sessionEmail = document.querySelector("#sessionEmail");
 const signOut = document.querySelector("#signOut");
 const profileForm = document.querySelector("#profileForm");
 const profileStatus = document.querySelector("#profileStatus");
+const profileEmail = document.querySelector("#profileEmail");
+const actForm = document.querySelector("#actForm");
+const actStatus = document.querySelector("#actStatus");
 const matchList = document.querySelector("#matchList");
 const refreshMatches = document.querySelector("#refreshMatches");
 const messageList = document.querySelector("#messageList");
@@ -94,6 +97,10 @@ const chatTitle = document.querySelector("#chatTitle");
 const passwordForm = document.querySelector("#passwordForm");
 const newPassword = document.querySelector("#newPassword");
 const passwordStatus = document.querySelector("#passwordStatus");
+const floatingChat = document.querySelector("#floatingChat");
+const chatWindow = document.querySelector("#chatWindow");
+const chatToggle = document.querySelector("#chatToggle");
+const chatClose = document.querySelector("#chatClose");
 const circleGrid = document.querySelector("#circleGrid");
 const diaryList = document.querySelector("#diaryList");
 const navAccess = document.querySelector("#navAccess");
@@ -110,6 +117,11 @@ function byId(id) {
 function setStatus(text, kind = "neutral") {
   profileStatus.textContent = text;
   profileStatus.dataset.kind = kind;
+}
+
+function setActStatus(text, kind = "neutral") {
+  actStatus.textContent = text;
+  actStatus.dataset.kind = kind;
 }
 
 function label(value) {
@@ -283,6 +295,7 @@ function renderSession() {
   document.body.classList.toggle("is-logged", isLogged);
   authCard.hidden = isLogged;
   dashboard.hidden = !isLogged;
+  floatingChat.hidden = !isLogged;
   navAccess.textContent = isLogged ? "Mi panel" : "Entrar";
 
   if (!isLogged) {
@@ -291,6 +304,7 @@ function renderSession() {
   }
 
   sessionEmail.textContent = currentUser.email;
+  profileEmail.textContent = currentUser.email;
   if (window.location.hash !== "#app") {
     window.location.hash = "#app";
   }
@@ -299,6 +313,7 @@ function renderSession() {
 
 async function loadProfileAndAct() {
   setStatus("Cargando...", "neutral");
+  setActStatus("Cargando...", "neutral");
 
   const [{ data: profile }, { data: acts }] = await Promise.all([
     db.from("profiles").select("*").eq("id", currentUser.id).maybeSingle(),
@@ -318,13 +333,43 @@ async function loadProfileAndAct() {
   byId("safetyPreference").value = currentAct?.safety_preference || "indistinto";
   byId("needStory").value = currentAct?.need_story || "";
 
-  setStatus(currentAct ? "Guardado" : "Nuevo perfil", currentAct ? "ok" : "neutral");
+  setStatus(profile ? "Guardado" : "Nuevo perfil", profile ? "ok" : "neutral");
+  setActStatus(currentAct ? "Guardado" : "Sin acto", currentAct ? "ok" : "neutral");
   await loadMatches();
 }
 
 async function saveProfile(event) {
   event.preventDefault();
   setStatus("Guardando...", "neutral");
+
+  const profile = {
+    id: currentUser.id,
+    display_name: byId("displayName").value.trim(),
+    zone: byId("zone").value.trim(),
+    gender: byId("gender").value,
+    updated_at: new Date().toISOString(),
+  };
+
+  const profileResult = await db.from("profiles").upsert(profile);
+
+  if (profileResult.error) {
+    setStatus("No se guardó", "bad");
+    return;
+  }
+
+  setStatus("Guardado", "ok");
+  await loadMatches();
+}
+
+async function saveAct(event) {
+  event.preventDefault();
+  setActStatus("Guardando...", "neutral");
+
+  const profileReady = byId("displayName").value.trim() && byId("zone").value.trim() && byId("gender").value;
+  if (!profileReady) {
+    setActStatus("Falta perfil", "bad");
+    return;
+  }
 
   const profile = {
     id: currentUser.id,
@@ -348,18 +393,19 @@ async function saveProfile(event) {
     updated_at: new Date().toISOString(),
   };
 
-  const profileResult = await db.from("profiles").upsert(profile);
   const actResult = currentAct
     ? await db.from("acts").update(act).eq("id", currentAct.id).select().single()
     : await db.from("acts").insert(act).select().single();
+  const profileResult = await db.from("profiles").upsert(profile);
 
-  if (profileResult.error || actResult.error) {
-    setStatus("No se guardó", "bad");
+  if (actResult.error || profileResult.error) {
+    setActStatus("No se guardó", "bad");
     return;
   }
 
   currentAct = actResult.data;
   setStatus("Guardado", "ok");
+  setActStatus("Guardado", "ok");
   await loadMatches();
 }
 
@@ -419,6 +465,7 @@ async function openConversation(matchActId) {
   chatTitle.textContent = "Chat abierto";
   messageBody.disabled = false;
   sendMessage.disabled = false;
+  chatWindow.hidden = false;
   await loadMessages();
 }
 
@@ -495,15 +542,23 @@ authForm.addEventListener("submit", handleAuth);
 createAccount.addEventListener("click", handleCreateAccount);
 magicLink.addEventListener("click", sendMagicLink);
 profileForm.addEventListener("submit", saveProfile);
+actForm.addEventListener("submit", saveAct);
 refreshMatches.addEventListener("click", loadMatches);
 refreshChat.addEventListener("click", loadMessages);
 messageForm.addEventListener("submit", sendChatMessage);
 passwordForm.addEventListener("submit", changePassword);
+chatToggle.addEventListener("click", () => {
+  chatWindow.hidden = !chatWindow.hidden;
+});
+chatClose.addEventListener("click", () => {
+  chatWindow.hidden = true;
+});
 signOut.addEventListener("click", async () => {
   await db.auth.signOut();
   currentUser = null;
   currentAct = null;
   activeConversationId = null;
+  chatWindow.hidden = true;
   renderSession();
   window.location.hash = "#inicio";
 });

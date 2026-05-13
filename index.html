@@ -10,9 +10,9 @@
     <meta name="theme-color" content="#183f3a" />
     <title>Actos</title>
     <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="stylesheet" href="styles.css?v=1.5" />
+    <link rel="stylesheet" href="styles.css?v=1.6" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="app.js?v=1.5" defer></script>
+    <script src="app.js?v=1.6" defer></script>
   </head>
   <body>
     <header class="app-header">
@@ -97,32 +97,70 @@
           </aside>
 
           <section class="dashboard-main">
-            <div class="panel-card">
-              <div class="panel-heading">
-                <div>
-                  <p class="eyebrow">Perfil privado</p>
-                  <h3>Qué podés dar y qué necesitás</h3>
+            <div class="profile-shell">
+              <div class="panel-card profile-card">
+                <div class="panel-heading">
+                  <div>
+                    <p class="eyebrow">Mi perfil</p>
+                    <h3>Tu identidad dentro de Actos</h3>
+                  </div>
+                  <span class="status-pill" id="profileStatus">Sin guardar</span>
                 </div>
-                <span class="status-pill" id="profileStatus">Sin guardar</span>
+
+                <div class="profile-summary">
+                  <span>Mail</span>
+                  <strong id="profileEmail">Tu mail</strong>
+                </div>
+
+                <form id="profileForm" class="profile-grid compact-grid">
+                  <label>
+                    Nombre o apodo
+                    <input id="displayName" type="text" placeholder="Ej. Diego" required />
+                  </label>
+                  <label>
+                    Zona
+                    <input id="zone" type="text" placeholder="Ej. Morón, Palermo, online" required />
+                  </label>
+                  <label>
+                    Me identifico como
+                    <select id="gender" required>
+                      <option value="">Elegí una opción</option>
+                      <option value="mujer">Mujer</option>
+                      <option value="hombre">Hombre</option>
+                    </select>
+                  </label>
+                  <button class="button primary full-span" type="submit">Guardar perfil</button>
+                </form>
               </div>
 
-              <form id="profileForm" class="profile-grid">
-                <label>
-                  Nombre o apodo
-                  <input id="displayName" type="text" placeholder="Ej. Diego" required />
-                </label>
-                <label>
-                  Zona
-                  <input id="zone" type="text" placeholder="Ej. Morón, Palermo, online" required />
-                </label>
-                <label>
-                  Me identifico como
-                  <select id="gender" required>
-                    <option value="">Elegí una opción</option>
-                    <option value="mujer">Mujer</option>
-                    <option value="hombre">Hombre</option>
-                  </select>
-                </label>
+              <div class="panel-card account-card">
+                <div class="panel-heading">
+                  <div>
+                    <p class="eyebrow">Cuenta</p>
+                    <h3>Contraseña</h3>
+                  </div>
+                </div>
+                <form id="passwordForm" class="stack-form">
+                  <label>
+                    Nueva contraseña
+                    <input id="newPassword" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
+                  </label>
+                  <button class="button secondary full" type="submit">Cambiar contraseña</button>
+                </form>
+                <p class="form-note" id="passwordStatus"></p>
+              </div>
+            </div>
+
+            <div class="panel-card act-card">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Mi acto</p>
+                  <h3>Cómo querés participar</h3>
+                </div>
+                <span class="status-pill" id="actStatus">Sin guardar</span>
+              </div>
+
+              <form id="actForm" class="act-form">
                 <label>
                   Quiero participar
                   <select id="matchMode" required>
@@ -203,20 +241,6 @@
             <div class="panel-card">
               <div class="panel-heading">
                 <div>
-                  <p class="eyebrow">Cuenta</p>
-                  <h3>Cambiar contraseña</h3>
-                </div>
-              </div>
-              <form id="passwordForm" class="message-form">
-                <input id="newPassword" type="password" placeholder="Nueva contraseña, mínimo 6 caracteres" autocomplete="new-password" />
-                <button class="button primary" type="submit">Cambiar</button>
-              </form>
-              <p class="form-note" id="passwordStatus"></p>
-            </div>
-
-            <div class="panel-card">
-              <div class="panel-heading">
-                <div>
                   <p class="eyebrow">Matches</p>
                   <h3>Personas o círculos compatibles, no catálogo público</h3>
                 </div>
@@ -224,24 +248,28 @@
               </div>
               <div class="match-list" id="matchList"></div>
             </div>
+          </section>
 
-            <div class="panel-card chat-panel">
-              <div class="panel-heading">
+          <aside class="floating-chat" id="floatingChat" hidden>
+            <button class="chat-fab" id="chatToggle" type="button">Chat</button>
+            <div class="chat-window" id="chatWindow">
+              <div class="chat-window-header">
                 <div>
                   <p class="eyebrow">Chat interno</p>
                   <h3 id="chatTitle">Sin conversación abierta</h3>
                 </div>
-                <button class="button secondary" id="refreshChat" type="button">Refrescar</button>
+                <button class="icon-button" id="chatClose" type="button" aria-label="Minimizar chat">×</button>
               </div>
               <div class="message-list" id="messageList">
-                <p class="empty-state">Abrí un match para conversar sin compartir teléfono ni mail.</p>
+                <p class="empty-state">Elegí un match para conversar sin compartir teléfono ni mail.</p>
               </div>
               <form id="messageForm" class="message-form">
                 <input id="messageBody" type="text" placeholder="Escribí un mensaje cuidado..." disabled />
                 <button class="button primary" type="submit" disabled id="sendMessage">Enviar</button>
               </form>
+              <button class="button secondary full" id="refreshChat" type="button">Refrescar chat</button>
             </div>
-          </section>
+          </aside>
         </div>
       </section>
 
