@@ -68,6 +68,9 @@ const labelByAvailability = {
   flexible: "horario flexible",
 };
 
+const SUPABASE_REST_URL = "https://pisifwrhsxzsbjhvykvx.supabase.co/rest/v1/actos_intake";
+const SUPABASE_PUBLIC_KEY = "sb_publisable_54ppTsmpRi0dlcHNt_Gp3A_jehgnPPR";
+
 const circleGrid = document.querySelector("#circleGrid");
 const diaryList = document.querySelector("#diaryList");
 const matchForm = document.querySelector("#matchForm");
@@ -134,7 +137,24 @@ function saveApplication(item) {
   window.localStorage.setItem("actos-applications", JSON.stringify([item, ...current].slice(0, 20)));
 }
 
-matchForm.addEventListener("submit", (event) => {
+async function sendApplication(payload) {
+  const response = await fetch(SUPABASE_REST_URL, {
+    method: "POST",
+    headers: {
+      apikey: SUPABASE_PUBLIC_KEY,
+      Authorization: `Bearer ${SUPABASE_PUBLIC_KEY}`,
+      "Content-Type": "application/json",
+      Prefer: "return=minimal",
+    },
+    body: JSON.stringify({ payload }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Supabase rejected the intake with status ${response.status}`);
+  }
+}
+
+matchForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const personName = document.querySelector("#personName").value.trim();
@@ -163,12 +183,40 @@ matchForm.addEventListener("submit", (event) => {
     availabilityLabel,
   };
 
-  saveApplication(latestMatch);
+  const intakePayload = {
+    personName,
+    offer,
+    offerLabel,
+    need,
+    needLabel,
+    needStory,
+    zone,
+    availability,
+    availabilityLabel,
+    purpose,
+    matchTitle: latestMatch.title,
+    matchText: latestMatch.text,
+    shareText: latestMatch.shareText,
+    createdAt: new Date().toISOString(),
+    source: "github_pages_pilot",
+    pageUrl: window.location.href,
+    userAgent: window.navigator.userAgent,
+  };
+
   resultTitle.textContent = latestMatch.title;
-  resultText.textContent = latestMatch.text;
+  resultText.textContent = "Guardando tu intencion en la mesa de entrada del piloto...";
   shareCard.textContent = latestMatch.shareText;
   resultSection.hidden = false;
   resultSection.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  try {
+    await sendApplication(intakePayload);
+    saveApplication({ ...latestMatch, savedRemotely: true });
+    resultText.textContent = `${latestMatch.text} Tu intencion ya quedo registrada para el piloto.`;
+  } catch {
+    saveApplication({ ...latestMatch, savedRemotely: false, intakePayload });
+    resultText.textContent = `${latestMatch.text} No pudimos confirmar el guardado online, asi que dejamos una copia local para no perderla.`;
+  }
 });
 
 saveAct.addEventListener("click", () => {
