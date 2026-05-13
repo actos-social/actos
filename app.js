@@ -148,13 +148,13 @@ async function handleAuth(event) {
   const { error } = await db.auth.signInWithOtp({
     email: authEmail.value.trim(),
     options: {
-      emailRedirectTo: `${window.location.origin}${window.location.pathname}#app`,
+      emailRedirectTo: `${window.location.origin}${window.location.pathname}`,
     },
   });
 
   authStatus.textContent = error
     ? "No pudimos mandar el enlace. Revisá el mail e intentá otra vez."
-    : "Listo. Revisá tu mail y abrí el enlace para entrar.";
+    : "Listo. Ahora abrí tu mail y tocá el enlace para entrar a tu panel.";
 }
 
 async function loadSession() {
