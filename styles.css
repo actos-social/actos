@@ -84,7 +84,7 @@ a {
 .hero {
   position: relative;
   display: grid;
-  min-height: calc(100vh - 68px);
+  min-height: calc(92vh - 68px);
   grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.65fr);
   align-items: center;
   gap: clamp(28px, 6vw, 86px);
@@ -131,7 +131,7 @@ p {
 h1 {
   max-width: 860px;
   margin: 0;
-  font-size: clamp(3rem, 10vw, 8.8rem);
+  font-size: clamp(3rem, 7.8vw, 7.2rem);
   line-height: 0.92;
   letter-spacing: 0;
 }
