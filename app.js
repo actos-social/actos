@@ -426,11 +426,16 @@ function renderMatches(matches = []) {
         <article class="match-card">
           <div>
             <strong>${match.display_name || "Alguien de Actos"}</strong>
-            <p>${match.zone || "Zona a coordinar"} · ${label(match.match_mode)} · ofrece ${label(match.offer)} · necesita ${label(match.need)}</p>
-            <p>Seguridad: ${label(match.safety_preference)}</p>
+            <div class="match-meta">
+              <span class="compatibility">Match real</span>
+              <span class="tag">${match.zone || "Zona a coordinar"}</span>
+              <span class="tag">${label(match.match_mode)}</span>
+              <span class="tag">Seguridad: ${label(match.safety_preference)}</span>
+            </div>
+            <p>Ofrece ${label(match.offer)} y necesita ${label(match.need)}.</p>
             <small>${match.need_story || "Sin contexto cargado todavía."}</small>
           </div>
-          <button class="button secondary" data-match-id="${match.act_id}" type="button">Abrir chat</button>
+          <button class="button primary" data-match-id="${match.act_id}" type="button">Abrir mensajes</button>
         </article>
       `,
     )
@@ -462,7 +467,7 @@ async function openConversation(matchActId) {
   }
 
   activeConversationId = Array.isArray(data) ? data[0]?.conversation_id : data;
-  chatTitle.textContent = "Chat abierto";
+  chatTitle.textContent = "Conversación de match";
   messageBody.disabled = false;
   sendMessage.disabled = false;
   chatWindow.hidden = false;

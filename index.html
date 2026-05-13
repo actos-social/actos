@@ -7,12 +7,12 @@
       name="description"
       content="Actos es una red privada donde la gente no sube contenido: sube actos."
     />
-    <meta name="theme-color" content="#183f3a" />
+    <meta name="theme-color" content="#10233f" />
     <title>Actos</title>
     <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="stylesheet" href="styles.css?v=1.7" />
+    <link rel="stylesheet" href="styles.css?v=1.8" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="app.js?v=1.7" defer></script>
+    <script src="app.js?v=1.8" defer></script>
   </head>
   <body>
     <header class="app-header">
@@ -30,7 +30,7 @@
     <main>
       <section class="hero public-view" id="inicio">
         <div class="hero-copy">
-          <p class="eyebrow">Privado, humano y sin show</p>
+          <p class="eyebrow">Red privada de ayuda real</p>
           <h1>La red donde la gente no sube contenido: sube actos.</h1>
           <p class="hero-text">
             Actos conecta personas por necesidades reales: compañía, orientación, autonomía,
@@ -42,18 +42,18 @@
           </div>
         </div>
         <div class="hero-panel" aria-label="Resumen de privacidad">
-          <div>
-            <span class="metric">1</span>
-            <span class="metric-label">perfil privado, recuperable desde cualquier dispositivo</span>
+          <div class="network-card main">
+            <span class="node-dot"></span>
+            <strong>Necesito practicar una entrevista</strong>
+            <small>Morón · trabajo · esta semana</small>
           </div>
-          <div>
-            <span class="metric">0</span>
-            <span class="metric-label">muros públicos para presumir ayuda</span>
+          <div class="network-link"></div>
+          <div class="network-card accent">
+            <span class="node-dot"></span>
+            <strong>Puedo ayudar con entrevistas</strong>
+            <small>Online · 92% compatible</small>
           </div>
-          <div>
-            <span class="metric">100%</span>
-            <span class="metric-label">matches con contexto, no favores al voleo</span>
-          </div>
+          <div class="match-signal">Match con contexto</div>
         </div>
       </section>
 
@@ -90,65 +90,53 @@
         </div>
 
         <div class="dashboard" id="dashboard" hidden>
-          <aside class="dashboard-side">
-            <p class="eyebrow">Sesión activa</p>
-            <strong id="sessionEmail">Tu cuenta</strong>
-            <button class="button secondary full" id="signOut" type="button">Salir</button>
-          </aside>
-
           <section class="dashboard-main">
-            <div class="profile-shell">
-              <div class="panel-card profile-card">
-                <div class="panel-heading">
-                  <div>
-                    <p class="eyebrow">Mi perfil</p>
-                    <h3>Tu identidad dentro de Actos</h3>
-                  </div>
+            <div class="workspace-topbar">
+              <div class="session-line">
+                <span class="session-dot" aria-hidden="true"></span>
+                <span>Sesión activa</span>
+                <strong id="sessionEmail">Tu cuenta</strong>
+              </div>
+              <details class="profile-drawer">
+                <summary>
+                  <span>Mi perfil y cuenta</span>
                   <span class="status-pill" id="profileStatus">Sin guardar</span>
-                </div>
-
-                <div class="profile-summary">
-                  <span>Mail</span>
-                  <strong id="profileEmail">Tu mail</strong>
-                </div>
-
-                <form id="profileForm" class="profile-grid compact-grid">
-                  <label>
-                    Nombre o apodo
-                    <input id="displayName" type="text" placeholder="Ej. Diego" required />
-                  </label>
-                  <label>
-                    Zona
-                    <input id="zone" type="text" placeholder="Ej. Morón, Palermo, online" required />
-                  </label>
-                  <label>
-                    Me identifico como
-                    <select id="gender" required>
-                      <option value="">Elegí una opción</option>
-                      <option value="mujer">Mujer</option>
-                      <option value="hombre">Hombre</option>
-                    </select>
-                  </label>
-                  <button class="button primary full-span" type="submit">Guardar perfil</button>
-                </form>
-              </div>
-
-              <div class="panel-card account-card">
-                <div class="panel-heading">
-                  <div>
-                    <p class="eyebrow">Cuenta</p>
-                    <h3>Contraseña</h3>
+                </summary>
+                <div class="profile-drawer-body">
+                  <div class="profile-summary">
+                    <span>Mail</span>
+                    <strong id="profileEmail">Tu mail</strong>
                   </div>
+                  <form id="profileForm" class="profile-grid compact-grid">
+                    <label>
+                      Nombre o apodo
+                      <input id="displayName" type="text" placeholder="Ej. Diego" required />
+                    </label>
+                    <label>
+                      Zona
+                      <input id="zone" type="text" placeholder="Ej. Morón, Palermo, online" required />
+                    </label>
+                    <label>
+                      Me identifico como
+                      <select id="gender" required>
+                        <option value="">Elegí una opción</option>
+                        <option value="mujer">Mujer</option>
+                        <option value="hombre">Hombre</option>
+                      </select>
+                    </label>
+                    <button class="button secondary full-span" type="submit">Guardar perfil</button>
+                  </form>
+                  <form id="passwordForm" class="password-inline">
+                    <label>
+                      Cambiar contraseña
+                      <input id="newPassword" type="password" placeholder="Nueva contraseña" autocomplete="new-password" />
+                    </label>
+                    <button class="button ghost" type="submit">Actualizar</button>
+                  </form>
+                  <p class="form-note" id="passwordStatus"></p>
+                  <button class="button quiet" id="signOut" type="button">Cerrar sesión</button>
                 </div>
-                <form id="passwordForm" class="stack-form">
-                  <label>
-                    Nueva contraseña
-                    <input id="newPassword" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
-                  </label>
-                  <button class="button secondary full" type="submit">Cambiar contraseña</button>
-                </form>
-                <p class="form-note" id="passwordStatus"></p>
-              </div>
+              </details>
             </div>
 
             <div class="panel-card act-card">
@@ -233,8 +221,8 @@
                 <button class="button primary full-span" type="submit">Guardar mi acto</button>
               </form>
               <p class="form-note">
-                Filtro Actos: si es salud, autonomía, pertenencia, oportunidad o cuidado, entra.
-                Si es “me da fiaca”, te queremos, pero no va por acá. La seguridad personal siempre se respeta.
+                Filtro Actos: salud, autonomía, pertenencia, oportunidad o cuidado. No es para resolver fiaca:
+                es para conectar ayuda con sentido.
               </p>
             </div>
 
@@ -242,7 +230,7 @@
               <div class="panel-heading">
                 <div>
                   <p class="eyebrow">Matches</p>
-                  <h3>Personas o círculos compatibles, no catálogo público</h3>
+                  <h3>Conexiones posibles</h3>
                 </div>
                 <button class="button secondary" id="refreshMatches" type="button">Actualizar</button>
               </div>
@@ -251,12 +239,15 @@
           </section>
 
           <aside class="floating-chat" id="floatingChat" hidden>
-            <button class="chat-fab" id="chatToggle" type="button">Chat</button>
+            <button class="chat-fab" id="chatToggle" type="button" aria-label="Abrir mensajes de matches">
+              <span>Mensajes</span>
+              <small>matches</small>
+            </button>
             <div class="chat-window" id="chatWindow" hidden>
               <div class="chat-window-header">
                 <div>
-                  <p class="eyebrow">Chat interno</p>
-                  <h3 id="chatTitle">Sin conversación abierta</h3>
+                  <p class="eyebrow">Mensajes de matches</p>
+                  <h3 id="chatTitle">Elegí una conexión</h3>
                 </div>
                 <button class="icon-button" id="chatClose" type="button" aria-label="Minimizar chat">×</button>
               </div>
