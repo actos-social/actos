@@ -215,7 +215,8 @@ h3 {
 .diary-section,
 .result-section,
 .manifesto,
-.pilot-section {
+.pilot-section,
+.ethos-section {
   padding: clamp(56px, 8vw, 110px) clamp(18px, 6vw, 92px);
 }
 
@@ -239,6 +240,45 @@ h3 {
   margin: 0;
   border-left: 4px solid var(--gold);
   padding-left: 16px;
+}
+
+.ethos-section {
+  background: #f1f7f3;
+}
+
+.ethos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.ethos-grid article {
+  min-height: 240px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 22px;
+  background: var(--panel);
+}
+
+.ethos-grid h3 {
+  font-size: 1.35rem;
+}
+
+.ethos-grid p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.ethos-yes {
+  border-top: 6px solid var(--green) !important;
+}
+
+.ethos-no {
+  border-top: 6px solid var(--coral) !important;
+}
+
+.ethos-rule {
+  border-top: 6px solid var(--gold) !important;
 }
 
 .section-heading {
@@ -312,9 +352,9 @@ label {
 }
 
 input,
-select {
+select,
+textarea {
   width: 100%;
-  min-height: 46px;
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 0 12px;
@@ -323,8 +363,21 @@ select {
   font: inherit;
 }
 
+input,
+select {
+  min-height: 46px;
+}
+
+textarea {
+  min-height: 118px;
+  padding-top: 12px;
+  line-height: 1.45;
+  resize: vertical;
+}
+
 input:focus,
-select:focus {
+select:focus,
+textarea:focus {
   outline: 3px solid rgba(228, 111, 81, 0.2);
   border-color: var(--coral);
 }
@@ -444,6 +497,10 @@ select:focus {
   .hero,
   .split-section,
   .manifesto {
+    grid-template-columns: 1fr;
+  }
+
+  .ethos-grid {
     grid-template-columns: 1fr;
   }
 

@@ -6,6 +6,8 @@ Actos es una red social donde la gente no sube contenido: sube actos.
 
 El producto no busca maximizar atencion. Busca convertir tiempo disponible en ayuda concreta, amistades con proposito y pruebas visibles de comunidad.
 
+Actos no es una app de mandados, favores gratis ni conveniencia inmediata. Su centro son necesidades humanas que tocan dignidad, cuidado, salud, autonomia, pertenencia u oportunidad.
+
 ## Version 0.2
 
 La version actual valida el relato y el primer gesto de participacion:
@@ -16,6 +18,7 @@ La version actual valida el relato y el primer gesto de participacion:
 - obtiene una ficha copiable;
 - puede registrar el acto en un diario local;
 - ve ejemplos de actos y circulos iniciales.
+- distingue entre una necesidad humana y un pedido por comodidad.
 
 Todavia no hay backend. Las postulaciones se guardan en el navegador del usuario para prototipar el flujo sin costo.
 
@@ -98,7 +101,30 @@ Para personas que se mudaron, migraron o sienten que empiezan de cero en un luga
 - Gratis para usar.
 - Sin likes como metrica central.
 - Sin seguidores al principio.
+- No resolver comodidad cuando no hay necesidad humana de fondo.
+- Priorizar pedidos vinculados a dignidad, cuidado, salud, autonomia, pertenencia u oportunidad.
 - Pocas acciones por semana para que sea manejable.
 - Privacidad y anonimato cuando el acto lo requiera.
 - Moderacion fuerte en pedidos sensibles.
 - El impacto se mide en actos, horas y agradecimientos.
+
+## Criterio cultural
+
+La pregunta guia es:
+
+> Si este acto ayuda a una persona a recuperar calma, dignidad, autonomia, salud, pertenencia u oportunidad, probablemente pertenece a Actos.
+
+Ejemplos que si pertenecen:
+
+- acompanar a alguien a un estudio medico si le da miedo ir solo;
+- ayudar a preparar una entrevista laboral;
+- explicar un tramite esencial;
+- escuchar a alguien que atraviesa soledad;
+- ensenar una habilidad que destraba autonomia.
+
+Ejemplos que no son el centro:
+
+- pedir traslados casuales por comodidad;
+- resolver compras;
+- reemplazar trabajo pago sin una necesidad humana de fondo;
+- conseguir favores rapidos que no construyen cuidado ni comunidad.

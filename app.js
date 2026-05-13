@@ -1,7 +1,7 @@
 const circles = [
   {
     title: "Trabajo sin hacerlo solo",
-    text: "Personas que buscan empleo se cruzan con gente que puede revisar CVs, practicar entrevistas y abrir puertas.",
+    text: "Personas que buscan empleo se cruzan con gente que puede revisar CVs, practicar entrevistas y abrir una primera orientacion.",
     tags: ["21 dias", "online", "4 a 6 personas"],
   },
   {
@@ -10,14 +10,14 @@ const circles = [
     tags: ["presencial", "barrio", "salidas simples"],
   },
   {
-    title: "Salir mas de casa",
-    text: "Caminatas, meriendas, bibliotecas y planes chicos para recuperar movimiento con compania tranquila.",
-    tags: ["cuidado", "ritmo bajo", "sin presion"],
+    title: "Atravesar algo acompanado",
+    text: "Turnos, tramites, conversaciones y momentos importantes que pesan menos con alguien al lado.",
+    tags: ["cuidado", "presencia", "sin juicio"],
   },
   {
-    title: "Oficios que circulan",
-    text: "Vecinos que ensenan, reparan o acompanan aprendizajes practicos sin convertir todo en dinero.",
-    tags: ["banco de tiempo", "local", "aprendizaje"],
+    title: "Autonomia practica",
+    text: "Personas que ensenan saberes concretos para que otra persona gane independencia.",
+    tags: ["aprendizaje", "autonomia", "dignidad"],
   },
 ];
 
@@ -27,37 +27,37 @@ const diarySeed = [
     text: "Una persona practico preguntas dificiles con alguien de recursos humanos y llego mas tranquila.",
   },
   {
-    title: "Primera caminata compartida",
-    text: "Dos desconocidos del mismo barrio salieron a caminar despues de semanas postergandolo.",
+    title: "Un estudio medico acompanado",
+    text: "Una persona no tuvo que atravesar sola una espera que le daba miedo.",
   },
   {
-    title: "Una campera arreglada",
-    text: "Un vecino enseno a coser un cierre y evito que una prenda terminara en la basura.",
+    title: "Un tramite traducido",
+    text: "Alguien explico un proceso confuso hasta convertirlo en pasos posibles.",
   },
 ];
 
 const copyByPurpose = {
   trabajo: "Te conviene entrar a un circulo de trabajo: alguien puede ayudarte y vos tambien podes sostener a otra persona que esta buscando.",
-  amistad: "Te conviene un circulo chico de amistad con proposito: menos charla infinita y mas encuentros simples con gente compatible.",
-  habitos: "Te conviene un circulo de habitos: 21 dias con pequenas acciones, seguimiento liviano y actos de apoyo entre pares.",
+  acompanamiento: "Te conviene un circulo de acompanamiento: personas disponibles para atravesar momentos importantes sin hacerlo todo en soledad.",
+  autonomia: "Te conviene un circulo de autonomia: pequenos aprendizajes y apoyos concretos que ayudan a destrabar la vida cotidiana.",
   ciudad: "Te conviene un circulo de ciudad nueva: personas cerca tuyo para descubrir lugares utiles y armar pertenencia sin forzarla.",
-  barrio: "Te conviene un circulo barrial: juntar tiempo disponible para resolver necesidades concretas alrededor tuyo.",
+  barrio: "Te conviene un circulo barrial: juntar tiempo disponible para cuidar necesidades reales alrededor tuyo.",
 };
 
 const labelByNeed = {
-  cv: "CV o entrevista",
+  trabajo: "prepararse para buscar trabajo",
   escucha: "escucha y compania",
-  idiomas: "practica de idiomas",
-  reparar: "reparacion u oficio",
-  caminar: "salir a caminar",
+  tramite: "afrontar un tramite importante",
+  autonomia: "aprender algo que destrabe",
+  salir: "volver a salir con compania",
 };
 
 const labelByOffer = {
-  cv: "ayuda con CV o entrevistas",
+  trabajo: "orientacion laboral o entrevistas",
   escucha: "escucha o acompanamiento",
-  idiomas: "practica de idiomas",
-  reparar: "reparacion u oficio",
-  caminar: "salir a caminar",
+  tramite: "acompanamiento a tramite esencial",
+  autonomia: "ensenar una habilidad para autonomia",
+  salir: "acompanar a volver a salir",
 };
 
 const labelByAvailability = {
@@ -140,6 +140,7 @@ matchForm.addEventListener("submit", (event) => {
   const personName = document.querySelector("#personName").value.trim();
   const offer = document.querySelector("#offer").value;
   const need = document.querySelector("#need").value;
+  const needStory = document.querySelector("#needStory").value.trim();
   const zone = document.querySelector("#zone").value.trim();
   const availability = document.querySelector("#availability").value;
   const purpose = document.querySelector("#purpose").value;
@@ -152,11 +153,12 @@ matchForm.addEventListener("submit", (event) => {
     personName,
     title: isDirectMatch ? `Acto directo en ${zone}` : `Circulo sugerido en ${zone}`,
     text: isDirectMatch
-      ? `Hay una compatibilidad fuerte: podes ofrecer ${needLabel} y tambien pedirlo. La app priorizaria un intercambio uno a uno con otra persona cercana.`
-      : `${copyByPurpose[purpose]} Ademas, tu pedido de ${needLabel} puede convivir con el tiempo que estas dispuesto a ofrecer.`,
-    shareText: `${personName} se suma a Actos en ${zone}: ofrece ${offerLabel}, necesita ${needLabel} y puede participar en ${availabilityLabel}.`,
+      ? `Hay una compatibilidad fuerte: podes ofrecer ${needLabel} y tambien pedirlo. Actos priorizaria un intercambio cuidado, acotado y con contexto.`
+      : `${copyByPurpose[purpose]} Tu pedido aparece como una necesidad de ${needLabel}, no como un favor suelto.`,
+    shareText: `${personName} se suma a Actos en ${zone}: ofrece ${offerLabel}, necesita ${needLabel} y puede participar en ${availabilityLabel}. Contexto: ${needStory}`,
     needLabel,
     offerLabel,
+    needStory,
     zone,
     availabilityLabel,
   };
@@ -174,7 +176,7 @@ saveAct.addEventListener("click", () => {
 
   saveDiaryItem({
     title: `Nuevo acto propuesto: ${latestMatch.needLabel}`,
-    text: `${latestMatch.personName} acaba de transformar una necesidad en una posible conexion de tiempo compartido en ${latestMatch.zone}.`,
+    text: `${latestMatch.personName} acaba de transformar una necesidad real en una posible conexion de tiempo compartido en ${latestMatch.zone}.`,
   });
   renderDiary();
   document.querySelector("#diario").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -183,7 +185,7 @@ saveAct.addEventListener("click", () => {
 copyAct.addEventListener("click", async () => {
   if (!latestMatch) return;
 
-  const text = `Actos - ficha de piloto\nNombre: ${latestMatch.personName}\nZona: ${latestMatch.zone}\nOfrece: ${latestMatch.offerLabel}\nNecesita: ${latestMatch.needLabel}\nDisponibilidad: ${latestMatch.availabilityLabel}\n\n${latestMatch.text}`;
+  const text = `Actos - ficha de piloto\nNombre: ${latestMatch.personName}\nZona: ${latestMatch.zone}\nOfrece: ${latestMatch.offerLabel}\nNecesita: ${latestMatch.needLabel}\nDisponibilidad: ${latestMatch.availabilityLabel}\nContexto humano: ${latestMatch.needStory}\n\n${latestMatch.text}`;
 
   try {
     await navigator.clipboard.writeText(text);
