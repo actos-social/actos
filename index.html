@@ -10,9 +10,9 @@
     <meta name="theme-color" content="#183f3a" />
     <title>Actos</title>
     <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="stylesheet" href="styles.css?v=0.9" />
+    <link rel="stylesheet" href="styles.css?v=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="app.js?v=0.9" defer></script>
+    <script src="app.js?v=1.0" defer></script>
   </head>
   <body>
     <header class="app-header">
@@ -21,14 +21,14 @@
         <span>Actos</span>
       </a>
       <nav class="top-nav" aria-label="Secciones">
-        <a href="#app">Entrar</a>
-        <a href="#como-funciona">Cómo funciona</a>
-        <a href="#espiritu">Criterio</a>
+        <a href="#inicio" class="public-link">Inicio</a>
+        <a href="#como-funciona" class="public-link">Cómo funciona</a>
+        <a href="#app" id="navAccess">Entrar</a>
       </nav>
     </header>
 
     <main>
-      <section class="hero" id="inicio">
+      <section class="hero public-view" id="inicio">
         <div class="hero-copy">
           <p class="eyebrow">Privado, humano y sin show</p>
           <h1>La red donde la gente no sube contenido: sube actos.</h1>
@@ -59,11 +59,10 @@
 
       <section class="app-section" id="app">
         <div class="section-heading compact">
-          <p class="eyebrow">Tu Actos</p>
-          <h2>Entrás con tu mail. Tu acto queda en la nube.</h2>
+          <p class="eyebrow">Entrar</p>
+          <h2>Primero entrás. Después cargás tu acto.</h2>
           <p>
-            No mostramos teléfono ni mail. Si hay match, se abre un chat dentro de Actos.
-            Simple, privado y sin vidriera.
+            La portada es informativa. Tu perfil, tus matches y tus chats viven en una zona privada.
           </p>
         </div>
 
@@ -105,6 +104,25 @@
                 <label>
                   Zona
                   <input id="zone" type="text" placeholder="Ej. Morón, Palermo, online" required />
+                </label>
+                <label>
+                  Me identifico como
+                  <select id="gender" required>
+                    <option value="">Elegí una opción</option>
+                    <option value="mujer">Mujer</option>
+                    <option value="varon">Varón</option>
+                    <option value="no_binario">No binario</option>
+                    <option value="prefiero_no_decir">Prefiero no decir</option>
+                  </select>
+                </label>
+                <label>
+                  Quiero participar
+                  <select id="matchMode" required>
+                    <option value="">Elegí una opción</option>
+                    <option value="individual">De a una persona</option>
+                    <option value="circulo">En un círculo grupal</option>
+                    <option value="ambos">Me sirven ambas</option>
+                  </select>
                 </label>
                 <label>
                   Puedo ofrecer
@@ -151,6 +169,13 @@
                   </select>
                 </label>
                 <label class="full-span">
+                  Preferencia de seguridad
+                  <select id="safetyPreference" required>
+                    <option value="sin_preferencia">Sin preferencia</option>
+                    <option value="solo_mujeres">Prefiero que me matchee sólo con mujeres</option>
+                  </select>
+                </label>
+                <label class="full-span">
                   Qué hay detrás de esa necesidad
                   <textarea
                     id="needStory"
@@ -163,7 +188,7 @@
               </form>
               <p class="form-note">
                 Filtro Actos: si es salud, autonomía, pertenencia, oportunidad o cuidado, entra.
-                Si es “me da fiaca”, te queremos, pero no va por acá.
+                Si es “me da fiaca”, te queremos, pero no va por acá. La seguridad personal siempre se respeta.
               </p>
             </div>
 
@@ -171,7 +196,7 @@
               <div class="panel-heading">
                 <div>
                   <p class="eyebrow">Matches</p>
-                  <h3>Personas compatibles, no catálogo público</h3>
+                  <h3>Personas o círculos compatibles, no catálogo público</h3>
                 </div>
                 <button class="button secondary" id="refreshMatches" type="button">Actualizar</button>
               </div>
@@ -198,7 +223,7 @@
         </div>
       </section>
 
-      <section class="ethos-section" id="espiritu">
+      <section class="ethos-section public-view" id="espiritu">
         <div class="section-heading">
           <p class="eyebrow">El criterio</p>
           <h2>Privado no significa frío. Significa cuidado.</h2>
@@ -219,10 +244,10 @@
         </div>
       </section>
 
-      <section class="section" id="como-funciona">
+      <section class="section public-view" id="como-funciona">
         <div class="section-heading">
           <p class="eyebrow">Cómo funciona</p>
-          <h2>Primero perfil. Después match. Recién ahí chat.</h2>
+          <h2>Primero entrás. Después perfil. Recién ahí matches y chat.</h2>
         </div>
         <div class="steps">
           <article>
@@ -238,7 +263,7 @@
           <article>
             <span class="step-number">03</span>
             <h3>Actos matchea</h3>
-            <p>Busca compatibilidad por necesidad, oferta, propósito y disponibilidad.</p>
+            <p>Busca compatibilidad por necesidad, oferta, propósito, disponibilidad y seguridad.</p>
           </article>
           <article>
             <span class="step-number">04</span>
@@ -248,7 +273,7 @@
         </div>
       </section>
 
-      <section class="section" id="circulos">
+      <section class="section public-view" id="circulos">
         <div class="section-heading">
           <p class="eyebrow">Círculos posibles</p>
           <h2>Ayuda concreta, en grupos chicos.</h2>
@@ -256,7 +281,7 @@
         <div class="circle-grid" id="circleGrid"></div>
       </section>
 
-      <section class="diary-section" id="diario">
+      <section class="diary-section public-view" id="diario">
         <div class="section-heading">
           <p class="eyebrow">Diario colectivo</p>
           <h2>Historias que inspiran sin convertir la ayuda en show.</h2>

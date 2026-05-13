@@ -15,6 +15,15 @@ const labels = {
   noche: "noche",
   finde: "fin de semana",
   flexible: "horario flexible",
+  individual: "match individual",
+  circulo: "círculo grupal",
+  ambos: "individual o círculo",
+  mujer: "mujer",
+  varon: "varón",
+  no_binario: "no binario",
+  prefiero_no_decir: "prefiere no decir",
+  solo_mujeres: "sólo mujeres",
+  sin_preferencia: "sin preferencia",
 };
 
 const circles = [
@@ -82,6 +91,7 @@ const refreshChat = document.querySelector("#refreshChat");
 const chatTitle = document.querySelector("#chatTitle");
 const circleGrid = document.querySelector("#circleGrid");
 const diaryList = document.querySelector("#diaryList");
+const navAccess = document.querySelector("#navAccess");
 
 let currentUser = null;
 let currentAct = null;
@@ -158,12 +168,20 @@ async function loadSession() {
 
 function renderSession() {
   const isLogged = Boolean(currentUser);
+  document.body.classList.toggle("is-logged", isLogged);
   authCard.hidden = isLogged;
   dashboard.hidden = !isLogged;
+  navAccess.textContent = isLogged ? "Mi panel" : "Entrar";
 
-  if (!isLogged) return;
+  if (!isLogged) {
+    window.location.hash = window.location.hash || "#inicio";
+    return;
+  }
 
   sessionEmail.textContent = currentUser.email;
+  if (window.location.hash !== "#app") {
+    window.location.hash = "#app";
+  }
   loadProfileAndAct();
 }
 
@@ -179,10 +197,13 @@ async function loadProfileAndAct() {
 
   byId("displayName").value = profile?.display_name || "";
   byId("zone").value = profile?.zone || currentAct?.zone || "";
+  byId("gender").value = profile?.gender || "";
   byId("offer").value = currentAct?.offer || "";
   byId("need").value = currentAct?.need || "";
   byId("availability").value = currentAct?.availability || "";
   byId("purpose").value = currentAct?.purpose || "";
+  byId("matchMode").value = currentAct?.match_mode || "";
+  byId("safetyPreference").value = currentAct?.safety_preference || "sin_preferencia";
   byId("needStory").value = currentAct?.need_story || "";
 
   setStatus(currentAct ? "Guardado" : "Nuevo perfil", currentAct ? "ok" : "neutral");
@@ -197,6 +218,7 @@ async function saveProfile(event) {
     id: currentUser.id,
     display_name: byId("displayName").value.trim(),
     zone: byId("zone").value.trim(),
+    gender: byId("gender").value,
     updated_at: new Date().toISOString(),
   };
 
@@ -208,6 +230,8 @@ async function saveProfile(event) {
     zone: byId("zone").value.trim(),
     availability: byId("availability").value,
     purpose: byId("purpose").value,
+    match_mode: byId("matchMode").value,
+    safety_preference: byId("safetyPreference").value,
     status: "active",
     updated_at: new Date().toISOString(),
   };
@@ -244,7 +268,8 @@ function renderMatches(matches = []) {
         <article class="match-card">
           <div>
             <strong>${match.display_name || "Alguien de Actos"}</strong>
-            <p>${match.zone || "Zona a coordinar"} · ofrece ${label(match.offer)} · necesita ${label(match.need)}</p>
+            <p>${match.zone || "Zona a coordinar"} · ${label(match.match_mode)} · ofrece ${label(match.offer)} · necesita ${label(match.need)}</p>
+            <p>Seguridad: ${label(match.safety_preference)}</p>
             <small>${match.need_story || "Sin contexto cargado todavía."}</small>
           </div>
           <button class="button secondary" data-match-id="${match.act_id}" type="button">Abrir chat</button>
@@ -344,6 +369,7 @@ signOut.addEventListener("click", async () => {
   currentAct = null;
   activeConversationId = null;
   renderSession();
+  window.location.hash = "#inicio";
 });
 
 matchList.addEventListener("click", (event) => {

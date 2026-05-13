@@ -1,6 +1,7 @@
 create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   display_name text not null,
+  gender text,
   zone text,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
@@ -15,10 +16,21 @@ create table if not exists public.acts (
   zone text,
   availability text,
   purpose text,
+  match_mode text not null default 'individual',
+  safety_preference text not null default 'sin_preferencia',
   status text not null default 'active',
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+alter table public.profiles
+add column if not exists gender text;
+
+alter table public.acts
+add column if not exists match_mode text not null default 'individual';
+
+alter table public.acts
+add column if not exists safety_preference text not null default 'sin_preferencia';
 
 create table if not exists public.conversations (
   id uuid primary key default gen_random_uuid(),
@@ -52,6 +64,9 @@ drop policy if exists "acts own update" on public.acts;
 drop policy if exists "conversations participant select" on public.conversations;
 drop policy if exists "messages participant select" on public.messages;
 drop policy if exists "messages participant insert" on public.messages;
+
+drop function if exists public.get_match_suggestions();
+drop function if exists public.create_conversation_for_match(uuid);
 
 create policy "profiles own select"
 on public.profiles for select
@@ -125,6 +140,8 @@ returns table (
   need_story text,
   availability text,
   purpose text,
+  match_mode text,
+  safety_preference text,
   score int
 )
 language sql
@@ -148,17 +165,24 @@ as $$
     a.need_story,
     a.availability,
     a.purpose,
+    a.match_mode,
+    a.safety_preference,
     (
       case when a.offer = my_act.need then 3 else 0 end +
       case when a.need = my_act.offer then 3 else 0 end +
       case when a.purpose = my_act.purpose then 1 else 0 end +
-      case when a.availability = my_act.availability or a.availability = 'flexible' or my_act.availability = 'flexible' then 1 else 0 end
+      case when a.availability = my_act.availability or a.availability = 'flexible' or my_act.availability = 'flexible' then 1 else 0 end +
+      case when a.match_mode = my_act.match_mode or a.match_mode = 'ambos' or my_act.match_mode = 'ambos' then 1 else 0 end
     ) as score
   from public.acts a
   join public.profiles p on p.id = a.user_id
+  join public.profiles me on me.id = auth.uid()
   cross join my_act
   where a.user_id <> auth.uid()
     and a.status = 'active'
+    and (a.match_mode = my_act.match_mode or a.match_mode = 'ambos' or my_act.match_mode = 'ambos')
+    and (a.safety_preference <> 'solo_mujeres' or me.gender = 'mujer')
+    and (my_act.safety_preference <> 'solo_mujeres' or p.gender = 'mujer')
     and (
       a.offer = my_act.need
       or a.need = my_act.offer
@@ -209,6 +233,24 @@ begin
     or other_act.purpose = my_act.purpose
   ) then
     raise exception 'Acts are not compatible';
+  end if;
+
+  if not (
+    other_act.match_mode = my_act.match_mode
+    or other_act.match_mode = 'ambos'
+    or my_act.match_mode = 'ambos'
+  ) then
+    raise exception 'Match mode is not compatible';
+  end if;
+
+  if other_act.safety_preference = 'solo_mujeres'
+    and not exists (select 1 from public.profiles where id = auth.uid() and gender = 'mujer') then
+    raise exception 'Safety preference does not allow this match';
+  end if;
+
+  if my_act.safety_preference = 'solo_mujeres'
+    and not exists (select 1 from public.profiles where id = other_act.user_id and gender = 'mujer') then
+    raise exception 'Safety preference does not allow this match';
   end if;
 
   select id

@@ -26,6 +26,14 @@
   display: none !important;
 }
 
+.is-logged .public-view {
+  display: none;
+}
+
+.is-logged .app-section {
+  min-height: calc(100vh - 68px);
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -263,6 +271,10 @@ h3 {
   background: #def7e8;
 }
 
+.is-logged .app-section > .section-heading {
+  display: none;
+}
+
 .auth-card,
 .panel-card,
 .dashboard-side {
@@ -342,7 +354,7 @@ h3 {
 }
 
 .profile-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .full-span {
