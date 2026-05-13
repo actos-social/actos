@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Actos es una red social donde la gente no sube contenido: sube actos."
+    />
+    <meta name="theme-color" content="#183f3a" />
+    <title>Actos</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <a class="brand" href="#inicio" aria-label="Actos inicio">
+        <span class="brand-mark">A</span>
+        <span>Actos</span>
+      </a>
+      <nav class="top-nav" aria-label="Secciones">
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#circulos">Círculos</a>
+        <a href="#diario">Diario</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" id="inicio">
+        <div class="hero-copy">
+          <p class="eyebrow">Banco de tiempo + amistad con propósito + diario colectivo</p>
+          <h1>La red social donde la gente no sube contenido: sube actos.</h1>
+          <p class="hero-text">
+            Ofrecé 30 minutos, pedí una mano o sumate a un círculo. La app conecta
+            personas para convertir tiempo disponible en comunidad real.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#participar">Empezar con un acto</a>
+            <a class="button secondary" href="#diario">Ver actos buenos</a>
+          </div>
+        </div>
+        <div class="hero-panel" aria-label="Resumen de impacto">
+          <div>
+            <span class="metric">184</span>
+            <span class="metric-label">minutos regalados esta semana</span>
+          </div>
+          <div>
+            <span class="metric">27</span>
+            <span class="metric-label">personas conectadas</span>
+          </div>
+          <div>
+            <span class="metric">9</span>
+            <span class="metric-label">círculos en marcha</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="como-funciona">
+        <div class="section-heading">
+          <p class="eyebrow">Una lógica simple</p>
+          <h2>La app matchea por intención, tiempo y cercanía.</h2>
+        </div>
+        <div class="steps">
+          <article>
+            <span class="step-number">01</span>
+            <h3>Decís qué podés dar</h3>
+            <p>Un saber, una escucha, una ayuda práctica o una compañía puntual.</p>
+          </article>
+          <article>
+            <span class="step-number">02</span>
+            <h3>Decís qué necesitás</h3>
+            <p>La necesidad queda acotada para que otra persona pueda responder sin presión.</p>
+          </article>
+          <article>
+            <span class="step-number">03</span>
+            <h3>Entrás a un círculo</h3>
+            <p>Grupos chicos de 21 días para trabajo, hábitos, ciudad nueva o apoyo práctico.</p>
+          </article>
+          <article>
+            <span class="step-number">04</span>
+            <h3>Subís el acto</h3>
+            <p>El diario registra lo bueno que pasó sin convertirlo en una competencia de likes.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="split-section" id="participar">
+        <div>
+          <p class="eyebrow">Prototipo funcional</p>
+          <h2>Encontrá una primera conexión.</h2>
+          <p>
+            Este formulario simula el primer match de la app. Más adelante puede conectarse
+            a una base de datos, moderación comunitaria y notificaciones.
+          </p>
+        </div>
+
+        <form class="match-form" id="matchForm">
+          <label>
+            Puedo ofrecer
+            <select id="offer" name="offer" required>
+              <option value="">Elegí una opción</option>
+              <option value="cv">Ayuda con CV o entrevistas</option>
+              <option value="escucha">Escuchar o acompañar</option>
+              <option value="idiomas">Practicar idiomas</option>
+              <option value="reparar">Reparar o enseñar un oficio</option>
+              <option value="caminar">Salir a caminar</option>
+            </select>
+          </label>
+          <label>
+            Necesito
+            <select id="need" name="need" required>
+              <option value="">Elegí una opción</option>
+              <option value="cv">Mejorar mi CV o entrevista</option>
+              <option value="escucha">Hablar con alguien</option>
+              <option value="idiomas">Practicar un idioma</option>
+              <option value="reparar">Arreglar algo o aprender un oficio</option>
+              <option value="caminar">Salir más de casa</option>
+            </select>
+          </label>
+          <label>
+            Zona
+            <input id="zone" name="zone" type="text" placeholder="Ej. Palermo, Cordoba, online" required />
+          </label>
+          <label>
+            Propósito
+            <select id="purpose" name="purpose" required>
+              <option value="">Elegí un propósito</option>
+              <option value="trabajo">Conseguir trabajo</option>
+              <option value="amistad">Conocer gente con calma</option>
+              <option value="habitos">Crear un hábito</option>
+              <option value="ciudad">Adaptarme a una ciudad</option>
+              <option value="barrio">Ayudar en mi barrio</option>
+            </select>
+          </label>
+          <button class="button primary full" type="submit">Ver match sugerido</button>
+          <p class="form-note">
+            No usa IA paga: cruza categorías, propósito, formato y zona para proponer conexiones.
+          </p>
+        </form>
+      </section>
+
+      <section class="result-section" id="resultado" hidden>
+        <div class="result-card">
+          <p class="eyebrow">Match sugerido</p>
+          <h2 id="resultTitle">Círculo recomendado</h2>
+          <p id="resultText"></p>
+          <div class="result-actions">
+            <button class="button primary" id="saveAct" type="button">Registrar acto</button>
+            <a class="button secondary" href="#circulos">Ver círculos</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="circulos">
+        <div class="section-heading">
+          <p class="eyebrow">Amistad con propósito</p>
+          <h2>Círculos de 21 días para que la ayuda tenga continuidad.</h2>
+        </div>
+        <div class="circle-grid" id="circleGrid"></div>
+      </section>
+
+      <section class="diary-section" id="diario">
+        <div class="section-heading">
+          <p class="eyebrow">Diario colectivo</p>
+          <h2>Actos que ya merecen ser contados.</h2>
+        </div>
+        <div class="diary-list" id="diaryList"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Actos es un concepto abierto y gratuito. Hecho para validar una comunidad antes que una empresa.</p>
+    </footer>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>

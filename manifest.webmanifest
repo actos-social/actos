@@ -1,0 +1,17 @@
+{
+  "name": "Actos",
+  "short_name": "Actos",
+  "description": "La red social donde la gente no sube contenido: sube actos.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fbfaf6",
+  "theme_color": "#183f3a",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

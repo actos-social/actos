@@ -1,0 +1,408 @@
+:root {
+  color-scheme: light;
+  --ink: #17211f;
+  --muted: #5c6764;
+  --paper: #fbfaf6;
+  --panel: #ffffff;
+  --line: #d9ded8;
+  --green: #183f3a;
+  --mint: #d7eee5;
+  --coral: #e46f51;
+  --gold: #e7b84d;
+  --blue: #456d9f;
+  --shadow: 0 18px 50px rgba(23, 33, 31, 0.12);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px clamp(18px, 4vw, 56px);
+  border-bottom: 1px solid rgba(217, 222, 216, 0.75);
+  background: rgba(251, 250, 246, 0.92);
+  backdrop-filter: blur(14px);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.brand-mark {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--green);
+  color: white;
+}
+
+.top-nav {
+  display: flex;
+  gap: 18px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.hero {
+  display: grid;
+  min-height: calc(100vh - 68px);
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.65fr);
+  align-items: center;
+  gap: clamp(28px, 6vw, 86px);
+  padding: clamp(48px, 8vw, 92px) clamp(18px, 6vw, 92px);
+}
+
+.hero-copy {
+  max-width: 780px;
+}
+
+.eyebrow {
+  margin: 0 0 14px;
+  color: var(--coral);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+p {
+  overflow-wrap: anywhere;
+}
+
+h1 {
+  max-width: 860px;
+  margin: 0;
+  font-size: clamp(3rem, 10vw, 8.8rem);
+  line-height: 0.92;
+  letter-spacing: 0;
+}
+
+h2 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+h3 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+
+.hero-text,
+.split-section p,
+.footer p {
+  color: var(--muted);
+  font-size: 1.08rem;
+  line-height: 1.65;
+}
+
+.hero-actions,
+.result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.button {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--green);
+  border-radius: 8px;
+  padding: 0 18px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(23, 33, 31, 0.14);
+}
+
+.button.primary {
+  background: var(--green);
+  color: white;
+}
+
+.button.secondary {
+  background: transparent;
+  color: var(--green);
+}
+
+.button.full {
+  width: 100%;
+}
+
+.hero-panel,
+.result-card {
+  display: grid;
+  gap: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 24px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.hero-panel > div {
+  border-left: 5px solid var(--mint);
+  padding: 4px 0 4px 18px;
+}
+
+.hero-panel > div:nth-child(2) {
+  border-left-color: var(--gold);
+}
+
+.hero-panel > div:nth-child(3) {
+  border-left-color: var(--blue);
+}
+
+.metric {
+  display: block;
+  font-size: clamp(2.4rem, 5vw, 4.8rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.metric-label {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.section,
+.split-section,
+.diary-section,
+.result-section {
+  padding: clamp(56px, 8vw, 110px) clamp(18px, 6vw, 92px);
+}
+
+.section-heading {
+  max-width: 820px;
+  margin-bottom: 30px;
+}
+
+.steps,
+.circle-grid,
+.diary-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.steps article,
+.circle-card,
+.diary-card {
+  min-height: 190px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 20px;
+  background: var(--panel);
+}
+
+.steps p,
+.circle-card p,
+.diary-card p,
+.form-note {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.step-number {
+  display: inline-block;
+  margin-bottom: 34px;
+  color: var(--coral);
+  font-weight: 900;
+}
+
+.split-section {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(320px, 0.75fr);
+  gap: clamp(28px, 6vw, 80px);
+  align-items: start;
+  background: #eef4ef;
+}
+
+.match-form {
+  display: grid;
+  gap: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 22px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+label {
+  display: grid;
+  gap: 8px;
+  font-weight: 800;
+}
+
+input,
+select {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 12px;
+  background: white;
+  color: var(--ink);
+  font: inherit;
+}
+
+input:focus,
+select:focus {
+  outline: 3px solid rgba(228, 111, 81, 0.2);
+  border-color: var(--coral);
+}
+
+.result-section {
+  padding-top: 0;
+  background: #eef4ef;
+}
+
+.result-card {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.circle-card {
+  display: grid;
+  align-content: space-between;
+  gap: 18px;
+}
+
+.circle-card strong {
+  display: block;
+  font-size: 1.25rem;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  border-radius: 999px;
+  padding: 7px 10px;
+  background: var(--mint);
+  color: var(--green);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.diary-section {
+  background: var(--green);
+  color: white;
+}
+
+.diary-section .eyebrow {
+  color: var(--gold);
+}
+
+.diary-section .diary-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.diary-section .diary-card p {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.footer {
+  padding: 24px clamp(18px, 6vw, 92px);
+  background: #101816;
+}
+
+.footer p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+@media (max-width: 900px) {
+  .top-nav {
+    display: none;
+  }
+
+  .hero,
+  .split-section {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    min-height: auto;
+  }
+
+  .steps,
+  .circle-grid,
+  .diary-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .app-header {
+    padding: 12px 16px;
+  }
+
+  h1 {
+    font-size: clamp(2.7rem, 16vw, 4.8rem);
+  }
+
+  .hero-actions,
+  .result-actions {
+    flex-direction: column;
+  }
+
+  .button {
+    width: 100%;
+  }
+
+  .steps,
+  .circle-grid,
+  .diary-list {
+    grid-template-columns: 1fr;
+  }
+}
