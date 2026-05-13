@@ -75,6 +75,7 @@ const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLIC_KEY, {
 const authCard = document.querySelector("#authCard");
 const authForm = document.querySelector("#authForm");
 const authEmail = document.querySelector("#authEmail");
+const authSubmit = document.querySelector("#authSubmit");
 const authStatus = document.querySelector("#authStatus");
 const dashboard = document.querySelector("#dashboard");
 const sessionEmail = document.querySelector("#sessionEmail");
@@ -96,6 +97,7 @@ const navAccess = document.querySelector("#navAccess");
 let currentUser = null;
 let currentAct = null;
 let activeConversationId = null;
+let authCooldownTimer = null;
 
 function byId(id) {
   return document.querySelector(`#${id}`);
@@ -143,18 +145,57 @@ function renderDiary() {
 
 async function handleAuth(event) {
   event.preventDefault();
+  const email = authEmail.value.trim();
   authStatus.textContent = "Mandando enlace...";
+  authSubmit.disabled = true;
 
   const { error } = await db.auth.signInWithOtp({
-    email: authEmail.value.trim(),
+    email,
     options: {
       emailRedirectTo: `${window.location.origin}${window.location.pathname}`,
+      shouldCreateUser: true,
     },
   });
 
-  authStatus.textContent = error
-    ? "No pudimos mandar el enlace. Revisá el mail e intentá otra vez."
-    : "Listo. Ahora abrí tu mail y tocá el enlace para entrar a tu panel.";
+  if (error) {
+    authStatus.textContent = getAuthErrorMessage(error);
+    authSubmit.disabled = false;
+    return;
+  }
+
+  authStatus.textContent =
+    `Listo. Te mandamos un enlace a ${email}. Abrilo en el dispositivo donde querés entrar.`;
+  startAuthCooldown();
+}
+
+function getAuthErrorMessage(error) {
+  const message = `${error.message || ""}`.toLowerCase();
+
+  if (message.includes("security") || message.includes("seconds") || message.includes("rate")) {
+    return "Supabase pide esperar un ratito antes de mandar otro enlace. Probá de nuevo en un minuto.";
+  }
+
+  if (message.includes("invalid")) {
+    return "Ese mail no parece válido. Revisalo y probá otra vez.";
+  }
+
+  return "No pudimos mandar el enlace. Esperá un minuto y probá de nuevo.";
+}
+
+function startAuthCooldown() {
+  let seconds = 60;
+  window.clearInterval(authCooldownTimer);
+  authSubmit.textContent = `Reenviar en ${seconds}s`;
+
+  authCooldownTimer = window.setInterval(() => {
+    seconds -= 1;
+    authSubmit.textContent = seconds > 0 ? `Reenviar en ${seconds}s` : "Mandarme otro enlace";
+
+    if (seconds <= 0) {
+      window.clearInterval(authCooldownTimer);
+      authSubmit.disabled = false;
+    }
+  }, 1000);
 }
 
 async function loadSession() {
