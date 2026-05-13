@@ -69,7 +69,7 @@ const labelByAvailability = {
 };
 
 const SUPABASE_REST_URL = "https://pisifwrhsxzsbjhvykvx.supabase.co/rest/v1/actos_intake";
-const SUPABASE_PUBLIC_KEY = "sb_publisable_54ppTsmpRi0dlcHNt_Gp3A_jehgnPPR";
+const SUPABASE_PUBLIC_KEY = "sb_publishable_54ppTsmpRi0dlcHNt_Gp3A_jehgnPPR";
 
 const circleGrid = document.querySelector("#circleGrid");
 const diaryList = document.querySelector("#diaryList");
