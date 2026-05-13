@@ -1,22 +1,22 @@
 const circles = [
   {
     title: "Trabajo sin hacerlo solo",
-    text: "Personas que buscan empleo se cruzan con gente que puede revisar CVs, practicar entrevistas y abrir una primera orientacion.",
-    tags: ["21 dias", "online", "4 a 6 personas"],
+    text: "CVs, entrevistas y ese momento raro de venderse sin sonar como folleto de supermercado.",
+    tags: ["21 dias", "online", "sin humo"],
   },
   {
     title: "Ciudad nueva, gente real",
-    text: "Para quienes migraron, se mudaron o sienten que arrancan de cero en un lugar desconocido.",
-    tags: ["presencial", "barrio", "salidas simples"],
+    text: "Para quienes migraron, se mudaron o sienten que el mapa les habla en idioma dificil.",
+    tags: ["presencial", "barrio", "gente real"],
   },
   {
     title: "Atravesar algo acompanado",
-    text: "Turnos, tramites, conversaciones y momentos importantes que pesan menos con alguien al lado.",
+    text: "Turnos, tramites y conversaciones que pesan menos cuando no vas con el corazon haciendo percusion.",
     tags: ["cuidado", "presencia", "sin juicio"],
   },
   {
     title: "Autonomia practica",
-    text: "Personas que ensenan saberes concretos para que otra persona gane independencia.",
+    text: "Aprender eso que destraba una parte de la vida. Pequeno para uno, gigante para otro.",
     tags: ["aprendizaje", "autonomia", "dignidad"],
   },
 ];
@@ -24,24 +24,24 @@ const circles = [
 const diarySeed = [
   {
     title: "30 minutos para una entrevista",
-    text: "Una persona practico preguntas dificiles con alguien de recursos humanos y llego mas tranquila.",
+    text: "Una persona practico preguntas dificiles y llego sin sentir que iba a rendir final de existencia.",
   },
   {
     title: "Un estudio medico acompanado",
-    text: "Una persona no tuvo que atravesar sola una espera que le daba miedo.",
+    text: "Una persona no tuvo que atravesar sola una espera que le daba miedo. A veces compania es medicina sin receta.",
   },
   {
     title: "Un tramite traducido",
-    text: "Alguien explico un proceso confuso hasta convertirlo en pasos posibles.",
+    text: "Alguien explico un proceso confuso hasta convertirlo en pasos posibles. Milagro administrativo, categoria humanidad.",
   },
 ];
 
 const copyByPurpose = {
-  trabajo: "Te conviene entrar a un circulo de trabajo: alguien puede ayudarte y vos tambien podes sostener a otra persona que esta buscando.",
-  acompanamiento: "Te conviene un circulo de acompanamiento: personas disponibles para atravesar momentos importantes sin hacerlo todo en soledad.",
-  autonomia: "Te conviene un circulo de autonomia: pequenos aprendizajes y apoyos concretos que ayudan a destrabar la vida cotidiana.",
-  ciudad: "Te conviene un circulo de ciudad nueva: personas cerca tuyo para descubrir lugares utiles y armar pertenencia sin forzarla.",
-  barrio: "Te conviene un circulo barrial: juntar tiempo disponible para cuidar necesidades reales alrededor tuyo.",
+  trabajo: "Te conviene entrar a un circulo de trabajo: ayuda concreta para buscar sin sentir que estas tirando CVs al oceano.",
+  acompanamiento: "Te conviene un circulo de acompanamiento: personas disponibles para atravesar momentos importantes sin poner cara de 'yo puedo con todo'.",
+  autonomia: "Te conviene un circulo de autonomia: aprendizajes chicos que abren puertas grandes.",
+  ciudad: "Te conviene un circulo de ciudad nueva: personas cerca tuyo para pasar del 'no conozco nada' al 'ya tengo un lugar'.",
+  barrio: "Te conviene un circulo barrial: tiempo disponible para cuidar necesidades reales alrededor tuyo, sin convertir el barrio en grupo infinito de mensajes.",
 };
 
 const labelByNeed = {
@@ -173,9 +173,9 @@ matchForm.addEventListener("submit", async (event) => {
     personName,
     title: isDirectMatch ? `Acto directo en ${zone}` : `Circulo sugerido en ${zone}`,
     text: isDirectMatch
-      ? `Hay una compatibilidad fuerte: podes ofrecer ${needLabel} y tambien pedirlo. Actos priorizaria un intercambio cuidado, acotado y con contexto.`
-      : `${copyByPurpose[purpose]} Tu pedido aparece como una necesidad de ${needLabel}, no como un favor suelto.`,
-    shareText: `${personName} se suma a Actos en ${zone}: ofrece ${offerLabel}, necesita ${needLabel} y puede participar en ${availabilityLabel}. Contexto: ${needStory}`,
+      ? `Hay una compatibilidad fuerte: podes ofrecer ${needLabel} y tambien pedirlo. Actos lo trataria como intercambio cuidado, acotado y con contexto. Nada de favor suelto con moño.`
+      : `${copyByPurpose[purpose]} Tu pedido aparece como una necesidad de ${needLabel}, no como un favor suelto con cara de "ya que estamos".`,
+    shareText: `${personName} se suma a Actos en ${zone}: ofrece ${offerLabel}, necesita ${needLabel} y puede participar en ${availabilityLabel}. Contexto humano, no excusa elegante: ${needStory}`,
     needLabel,
     offerLabel,
     needStory,
@@ -204,7 +204,7 @@ matchForm.addEventListener("submit", async (event) => {
   };
 
   resultTitle.textContent = latestMatch.title;
-  resultText.textContent = "Guardando tu intencion en la mesa de entrada del piloto...";
+  resultText.textContent = "Guardando tu intencion en la mesa de entrada del piloto. Momento serio, pero breve...";
   shareCard.textContent = latestMatch.shareText;
   resultSection.hidden = false;
   resultSection.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -212,10 +212,10 @@ matchForm.addEventListener("submit", async (event) => {
   try {
     await sendApplication(intakePayload);
     saveApplication({ ...latestMatch, savedRemotely: true });
-    resultText.textContent = `${latestMatch.text} Tu intencion ya quedo registrada para el piloto.`;
+    resultText.textContent = `${latestMatch.text} Tu intencion ya quedo registrada para el piloto. Bien: acto posible, no tramite infinito.`;
   } catch {
     saveApplication({ ...latestMatch, savedRemotely: false, intakePayload });
-    resultText.textContent = `${latestMatch.text} No pudimos confirmar el guardado online, asi que dejamos una copia local para no perderla.`;
+    resultText.textContent = `${latestMatch.text} No pudimos confirmar el guardado online, asi que dejamos una copia local para no perderla. Internet hizo una pausa dramatica.`;
   }
 });
 
@@ -224,7 +224,7 @@ saveAct.addEventListener("click", () => {
 
   saveDiaryItem({
     title: `Nuevo acto propuesto: ${latestMatch.needLabel}`,
-    text: `${latestMatch.personName} acaba de transformar una necesidad real en una posible conexion de tiempo compartido en ${latestMatch.zone}.`,
+    text: `${latestMatch.personName} acaba de transformar una necesidad real en una posible conexion de tiempo compartido en ${latestMatch.zone}. Punto para la humanidad discreta.`,
   });
   renderDiary();
   document.querySelector("#diario").scrollIntoView({ behavior: "smooth", block: "start" });

@@ -7,9 +7,11 @@
   --line: #d9ded8;
   --green: #183f3a;
   --mint: #d7eee5;
+  --lime: #c6f06f;
   --coral: #e46f51;
   --gold: #e7b84d;
   --blue: #456d9f;
+  --pink: #f3a7b5;
   --shadow: 0 18px 50px rgba(23, 33, 31, 0.12);
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -26,7 +28,9 @@ html {
 
 body {
   margin: 0;
-  background: var(--paper);
+  background:
+    repeating-linear-gradient(135deg, rgba(24, 63, 58, 0.035) 0 1px, transparent 1px 18px),
+    var(--paper);
   color: var(--ink);
 }
 
@@ -63,8 +67,11 @@ a {
   height: 34px;
   place-items: center;
   border-radius: 8px;
-  background: var(--green);
-  color: white;
+  border: 2px solid var(--ink);
+  background: var(--lime);
+  color: var(--ink);
+  transform: rotate(-4deg);
+  box-shadow: 4px 4px 0 var(--ink);
 }
 
 .top-nav {
@@ -75,12 +82,30 @@ a {
 }
 
 .hero {
+  position: relative;
   display: grid;
   min-height: calc(100vh - 68px);
   grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.65fr);
   align-items: center;
   gap: clamp(28px, 6vw, 86px);
   padding: clamp(48px, 8vw, 92px) clamp(18px, 6vw, 92px);
+}
+
+.hero::after {
+  position: absolute;
+  right: clamp(18px, 5vw, 72px);
+  bottom: 26px;
+  max-width: 260px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  padding: 12px 14px;
+  background: var(--gold);
+  box-shadow: 6px 6px 0 var(--ink);
+  color: var(--ink);
+  content: "Filtro Actos: necesidad real si, fiaca con marketing no.";
+  font-weight: 900;
+  line-height: 1.25;
+  transform: rotate(2deg);
 }
 
 .hero-copy {
@@ -156,18 +181,20 @@ h3 {
 }
 
 .button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(23, 33, 31, 0.14);
+  transform: translate(-1px, -2px);
+  box-shadow: 5px 5px 0 rgba(23, 33, 31, 0.88);
 }
 
 .button.primary {
-  background: var(--green);
-  color: white;
+  border-color: var(--ink);
+  background: var(--lime);
+  color: var(--ink);
 }
 
 .button.secondary {
-  background: transparent;
-  color: var(--green);
+  border-color: var(--ink);
+  background: white;
+  color: var(--ink);
 }
 
 .button.full {
@@ -178,15 +205,15 @@ h3 {
 .result-card {
   display: grid;
   gap: 18px;
-  border: 1px solid var(--line);
+  border: 2px solid var(--ink);
   border-radius: 8px;
   padding: 24px;
   background: var(--panel);
-  box-shadow: var(--shadow);
+  box-shadow: 8px 8px 0 var(--ink);
 }
 
 .hero-panel > div {
-  border-left: 5px solid var(--mint);
+  border-left: 7px solid var(--lime);
   padding: 4px 0 4px 18px;
 }
 
@@ -195,7 +222,7 @@ h3 {
 }
 
 .hero-panel > div:nth-child(3) {
-  border-left-color: var(--blue);
+  border-left-color: var(--pink);
 }
 
 .metric {
@@ -225,7 +252,7 @@ h3 {
   grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.75fr);
   gap: clamp(26px, 6vw, 78px);
   align-items: start;
-  background: #fff7ec;
+  background: #fff1c7;
 }
 
 .manifesto-points {
@@ -238,12 +265,15 @@ h3 {
 
 .manifesto-points p {
   margin: 0;
-  border-left: 4px solid var(--gold);
-  padding-left: 16px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  padding: 14px 16px;
+  background: white;
+  box-shadow: 5px 5px 0 rgba(23, 33, 31, 0.9);
 }
 
 .ethos-section {
-  background: #f1f7f3;
+  background: #e8f7ff;
 }
 
 .ethos-grid {
@@ -254,10 +284,25 @@ h3 {
 
 .ethos-grid article {
   min-height: 240px;
-  border: 1px solid var(--line);
+  border: 2px solid var(--ink);
   border-radius: 8px;
   padding: 22px;
   background: var(--panel);
+  box-shadow: 5px 5px 0 rgba(23, 33, 31, 0.9);
+}
+
+.ethos-grid article:nth-child(1),
+.steps article:nth-child(2),
+.act-grid article:nth-child(3),
+.diary-card:nth-child(2) {
+  transform: rotate(-1deg);
+}
+
+.ethos-grid article:nth-child(2),
+.steps article:nth-child(3),
+.act-grid article:nth-child(1),
+.circle-card:nth-child(3) {
+  transform: rotate(1deg);
 }
 
 .ethos-grid h3 {
@@ -270,15 +315,15 @@ h3 {
 }
 
 .ethos-yes {
-  border-top: 6px solid var(--green) !important;
+  background: #ecffe1 !important;
 }
 
 .ethos-no {
-  border-top: 6px solid var(--coral) !important;
+  background: #ffe9e1 !important;
 }
 
 .ethos-rule {
-  border-top: 6px solid var(--gold) !important;
+  background: #fff7cf !important;
 }
 
 .section-heading {
@@ -300,10 +345,11 @@ h3 {
 .diary-card,
 .act-grid article {
   min-height: 190px;
-  border: 1px solid var(--line);
+  border: 2px solid var(--ink);
   border-radius: 8px;
   padding: 20px;
   background: var(--panel);
+  box-shadow: 5px 5px 0 rgba(23, 33, 31, 0.9);
 }
 
 .steps p,
@@ -332,17 +378,17 @@ h3 {
   grid-template-columns: minmax(0, 0.85fr) minmax(320px, 0.75fr);
   gap: clamp(28px, 6vw, 80px);
   align-items: start;
-  background: #eef4ef;
+  background: #def7e8;
 }
 
 .match-form {
   display: grid;
   gap: 16px;
-  border: 1px solid var(--line);
+  border: 2px solid var(--ink);
   border-radius: 8px;
   padding: 22px;
   background: var(--panel);
-  box-shadow: var(--shadow);
+  box-shadow: 8px 8px 0 var(--ink);
 }
 
 label {
@@ -355,7 +401,7 @@ input,
 select,
 textarea {
   width: 100%;
-  border: 1px solid var(--line);
+  border: 2px solid var(--line);
   border-radius: 8px;
   padding: 0 12px;
   background: white;
@@ -378,13 +424,13 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus {
-  outline: 3px solid rgba(228, 111, 81, 0.2);
+  outline: 4px solid rgba(198, 240, 111, 0.65);
   border-color: var(--coral);
 }
 
 .result-section {
   padding-top: 0;
-  background: #eef4ef;
+  background: #def7e8;
 }
 
 .result-card {
@@ -393,11 +439,11 @@ textarea:focus {
 }
 
 .share-card {
-  border: 1px solid rgba(24, 63, 58, 0.16);
+  border: 2px solid var(--ink);
   border-radius: 8px;
   padding: 18px;
-  background: var(--mint);
-  color: var(--green);
+  background: #fff1c7;
+  color: var(--ink);
   font-weight: 800;
   line-height: 1.45;
 }
@@ -420,16 +466,17 @@ textarea:focus {
 }
 
 .tag {
+  border: 1px solid var(--ink);
   border-radius: 999px;
   padding: 7px 10px;
-  background: var(--mint);
-  color: var(--green);
+  background: var(--lime);
+  color: var(--ink);
   font-size: 0.82rem;
   font-weight: 800;
 }
 
 .diary-section {
-  background: var(--green);
+  background: #17211f;
   color: white;
 }
 
@@ -438,8 +485,9 @@ textarea:focus {
 }
 
 .diary-section .diary-card {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.18);
+  background: #20302c;
+  border-color: var(--lime);
+  box-shadow: 5px 5px 0 var(--lime);
 }
 
 .diary-section .diary-card p {
@@ -447,7 +495,7 @@ textarea:focus {
 }
 
 .pilot-section {
-  background: #f4f1e8;
+  background: #f9e4ed;
 }
 
 .pilot-list {
@@ -506,6 +554,15 @@ textarea:focus {
 
   .hero {
     min-height: auto;
+  }
+
+  .hero::after {
+    position: static;
+    max-width: none;
+    grid-column: 1;
+    justify-self: start;
+    margin-top: -8px;
+    transform: rotate(-1deg);
   }
 
   .steps,
