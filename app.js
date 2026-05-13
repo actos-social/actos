@@ -75,7 +75,10 @@ const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLIC_KEY, {
 const authCard = document.querySelector("#authCard");
 const authForm = document.querySelector("#authForm");
 const authEmail = document.querySelector("#authEmail");
+const authPassword = document.querySelector("#authPassword");
 const authSubmit = document.querySelector("#authSubmit");
+const createAccount = document.querySelector("#createAccount");
+const magicLink = document.querySelector("#magicLink");
 const authStatus = document.querySelector("#authStatus");
 const dashboard = document.querySelector("#dashboard");
 const sessionEmail = document.querySelector("#sessionEmail");
@@ -143,11 +146,15 @@ function renderDiary() {
     .join("");
 }
 
-async function handleAuth(event) {
-  event.preventDefault();
+async function sendMagicLink() {
   const email = authEmail.value.trim();
+  if (!email) {
+    authStatus.textContent = "Poné tu mail primero.";
+    return;
+  }
+
   authStatus.textContent = "Mandando enlace...";
-  authSubmit.disabled = true;
+  magicLink.disabled = true;
 
   const { error } = await db.auth.signInWithOtp({
     email,
@@ -159,13 +166,62 @@ async function handleAuth(event) {
 
   if (error) {
     authStatus.textContent = getAuthErrorMessage(error);
-    authSubmit.disabled = false;
+    magicLink.disabled = false;
     return;
   }
 
   authStatus.textContent =
     `Listo. Te mandamos un enlace a ${email}. Abrilo en el dispositivo donde querés entrar.`;
   startAuthCooldown();
+}
+
+async function handleAuth(event) {
+  event.preventDefault();
+  const email = authEmail.value.trim();
+  const password = authPassword.value;
+
+  if (!email || !password) {
+    authStatus.textContent = "Poné mail y contraseña para entrar.";
+    return;
+  }
+
+  authSubmit.disabled = true;
+  authStatus.textContent = "Entrando...";
+
+  const { error } = await db.auth.signInWithPassword({ email, password });
+
+  if (error) {
+    authStatus.textContent = "No pudimos entrar. Revisá el mail y la contraseña.";
+    authSubmit.disabled = false;
+    return;
+  }
+
+  authStatus.textContent = "Listo. Entraste a Actos.";
+  authSubmit.disabled = false;
+}
+
+async function handleCreateAccount() {
+  const email = authEmail.value.trim();
+  const password = authPassword.value;
+
+  if (!email || password.length < 6) {
+    authStatus.textContent = "Poné un mail y una contraseña de al menos 6 caracteres.";
+    return;
+  }
+
+  createAccount.disabled = true;
+  authStatus.textContent = "Creando cuenta...";
+
+  const { error } = await db.auth.signUp({ email, password });
+
+  if (error) {
+    authStatus.textContent = getPasswordSignupError(error);
+    createAccount.disabled = false;
+    return;
+  }
+
+  authStatus.textContent = "Cuenta creada. Ya podés entrar con esa contraseña.";
+  createAccount.disabled = false;
 }
 
 function getAuthErrorMessage(error) {
@@ -182,18 +238,32 @@ function getAuthErrorMessage(error) {
   return "No pudimos mandar el enlace. Esperá un minuto y probá de nuevo.";
 }
 
+function getPasswordSignupError(error) {
+  const message = `${error.message || ""}`.toLowerCase();
+
+  if (message.includes("already") || message.includes("registered") || message.includes("exists")) {
+    return "Ese mail ya existe. Probá entrar con tu contraseña.";
+  }
+
+  if (message.includes("password")) {
+    return "La contraseña tiene que tener al menos 6 caracteres.";
+  }
+
+  return "No pudimos crear la cuenta. Probá con otro mail o intentá de nuevo en un rato.";
+}
+
 function startAuthCooldown() {
   let seconds = 60;
   window.clearInterval(authCooldownTimer);
-  authSubmit.textContent = `Reenviar en ${seconds}s`;
+  magicLink.textContent = `Reenviar en ${seconds}s`;
 
   authCooldownTimer = window.setInterval(() => {
     seconds -= 1;
-    authSubmit.textContent = seconds > 0 ? `Reenviar en ${seconds}s` : "Mandarme otro enlace";
+    magicLink.textContent = seconds > 0 ? `Reenviar en ${seconds}s` : "Mandarme enlace mágico";
 
     if (seconds <= 0) {
       window.clearInterval(authCooldownTimer);
-      authSubmit.disabled = false;
+      magicLink.disabled = false;
     }
   }, 1000);
 }
@@ -400,6 +470,8 @@ async function sendChatMessage(event) {
 }
 
 authForm.addEventListener("submit", handleAuth);
+createAccount.addEventListener("click", handleCreateAccount);
+magicLink.addEventListener("click", sendMagicLink);
 profileForm.addEventListener("submit", saveProfile);
 refreshMatches.addEventListener("click", loadMatches);
 refreshChat.addEventListener("click", loadMessages);

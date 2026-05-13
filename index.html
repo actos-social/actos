@@ -10,9 +10,9 @@
     <meta name="theme-color" content="#183f3a" />
     <title>Actos</title>
     <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="stylesheet" href="styles.css?v=1.3" />
+    <link rel="stylesheet" href="styles.css?v=1.4" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="app.js?v=1.3" defer></script>
+    <script src="app.js?v=1.4" defer></script>
   </head>
   <body>
     <header class="app-header">
@@ -68,17 +68,23 @@
 
         <div class="auth-card" id="authCard">
           <h3>Entrar o crear cuenta</h3>
-          <p>Te mandamos un enlace al mail. Ese enlace abre tu sesión en el dispositivo donde lo tocás.</p>
+          <p>Para no depender del límite de emails, podés entrar con contraseña. El enlace mágico queda como alternativa.</p>
           <form id="authForm" class="stack-form">
             <label>
               Mail
               <input id="authEmail" type="email" placeholder="tu@mail.com" autocomplete="email" required />
             </label>
-            <button class="button primary full" id="authSubmit" type="submit">Mandarme el enlace</button>
+            <label>
+              Contraseña
+              <input id="authPassword" type="password" placeholder="Mínimo 6 caracteres" autocomplete="current-password" />
+            </label>
+            <button class="button primary full" id="authSubmit" type="submit">Entrar con contraseña</button>
+            <button class="button secondary full" id="createAccount" type="button">Crear cuenta con contraseña</button>
+            <button class="button secondary full" id="magicLink" type="button">Mandarme enlace mágico</button>
           </form>
           <div class="auth-help">
-            <strong>Ejemplo simple:</strong>
-            si querés entrar en la compu, abrí el mail desde la compu. Si lo abrís en el celular, entra el celular.
+            <strong>Recomendado:</strong>
+            usá contraseña para entrar desde cualquier dispositivo. El enlace mágico puede bloquearse si se pide muchas veces.
           </div>
           <p class="form-note" id="authStatus"></p>
         </div>
