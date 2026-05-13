@@ -28,14 +28,14 @@
     <main>
       <section class="hero" id="inicio">
         <div class="hero-copy">
-          <p class="eyebrow">Banco de tiempo + amistad con propósito + diario colectivo</p>
+        <p class="eyebrow">Banco de tiempo + amistad con proposito + diario colectivo</p>
           <h1>La red social donde la gente no sube contenido: sube actos.</h1>
           <p class="hero-text">
             Ofrecé 30 minutos, pedí una mano o sumate a un círculo. La app conecta
             personas para convertir tiempo disponible en comunidad real.
           </p>
           <div class="hero-actions">
-            <a class="button primary" href="#participar">Empezar con un acto</a>
+            <a class="button primary" href="#participar">Sumarme al piloto</a>
             <a class="button secondary" href="#diario">Ver actos buenos</a>
           </div>
         </div>
@@ -52,6 +52,18 @@
             <span class="metric">9</span>
             <span class="metric-label">círculos en marcha</span>
           </div>
+        </div>
+      </section>
+
+      <section class="manifesto" id="manifiesto">
+        <div class="manifesto-copy">
+          <p class="eyebrow">Manifiesto</p>
+          <h2>No necesitamos otra red para mirar vidas. Necesitamos una red para activar cuidado.</h2>
+        </div>
+        <div class="manifesto-points">
+          <p>Actos empieza con una pregunta sencilla: qué podés hacer por alguien esta semana.</p>
+          <p>La ayuda no tiene que ser heroica. Puede ser media hora, una caminata, una explicación, una escucha o una puerta abierta.</p>
+          <p>La comunidad se vuelve visible cuando deja de medirse en seguidores y empieza a medirse en actos completados.</p>
         </div>
       </section>
 
@@ -87,14 +99,18 @@
       <section class="split-section" id="participar">
         <div>
           <p class="eyebrow">Prototipo funcional</p>
-          <h2>Encontrá una primera conexión.</h2>
+          <h2>Sumate al primer piloto.</h2>
           <p>
-            Este formulario simula el primer match de la app. Más adelante puede conectarse
-            a una base de datos, moderación comunitaria y notificaciones.
+            Dejá una intención concreta. En esta versión se guarda en tu navegador y genera
+            una ficha lista para compartir con el equipo fundador o convertir luego en registro real.
           </p>
         </div>
 
         <form class="match-form" id="matchForm">
+          <label>
+            Nombre o apodo
+            <input id="personName" name="personName" type="text" placeholder="Ej. Diego" required />
+          </label>
           <label>
             Puedo ofrecer
             <select id="offer" name="offer" required>
@@ -122,6 +138,17 @@
             <input id="zone" name="zone" type="text" placeholder="Ej. Palermo, Cordoba, online" required />
           </label>
           <label>
+            Disponibilidad
+            <select id="availability" name="availability" required>
+              <option value="">Elegí una opción</option>
+              <option value="manana">Mañana</option>
+              <option value="tarde">Tarde</option>
+              <option value="noche">Noche</option>
+              <option value="finde">Fin de semana</option>
+              <option value="flexible">Flexible</option>
+            </select>
+          </label>
+          <label>
             Propósito
             <select id="purpose" name="purpose" required>
               <option value="">Elegí un propósito</option>
@@ -134,7 +161,7 @@
           </label>
           <button class="button primary full" type="submit">Ver match sugerido</button>
           <p class="form-note">
-            No usa IA paga: cruza categorías, propósito, formato y zona para proponer conexiones.
+            No usa IA paga: cruza categorias, proposito, disponibilidad y zona para proponer conexiones.
           </p>
         </form>
       </section>
@@ -144,16 +171,43 @@
           <p class="eyebrow">Match sugerido</p>
           <h2 id="resultTitle">Círculo recomendado</h2>
           <p id="resultText"></p>
+          <div class="share-card" id="shareCard"></div>
           <div class="result-actions">
             <button class="button primary" id="saveAct" type="button">Registrar acto</button>
+            <button class="button secondary" id="copyAct" type="button">Copiar ficha</button>
             <a class="button secondary" href="#circulos">Ver círculos</a>
           </div>
         </div>
       </section>
 
+      <section class="section" id="actos-iniciales">
+        <div class="section-heading">
+          <p class="eyebrow">Primeros actos posibles</p>
+          <h2>Acciones chicas, impacto real.</h2>
+        </div>
+        <div class="act-grid">
+          <article>
+            <strong>Revisar un CV</strong>
+            <p>30 minutos para ordenar experiencia, mejorar una presentación y practicar una entrevista.</p>
+          </article>
+          <article>
+            <strong>Caminar con alguien</strong>
+            <p>Un plan simple para quien necesita salir de casa, conocer su barrio o volver a moverse.</p>
+          </article>
+          <article>
+            <strong>Explicar un trámite</strong>
+            <p>Convertir un proceso confuso en tres pasos claros, sin juzgar a quien pide ayuda.</p>
+          </article>
+          <article>
+            <strong>Enseñar algo práctico</strong>
+            <p>Excel, idiomas, costura, cocina, herramientas, organización o cualquier saber que destrabe.</p>
+          </article>
+        </div>
+      </section>
+
       <section class="section" id="circulos">
         <div class="section-heading">
-          <p class="eyebrow">Amistad con propósito</p>
+          <p class="eyebrow">Amistad con proposito</p>
           <h2>Círculos de 21 días para que la ayuda tenga continuidad.</h2>
         </div>
         <div class="circle-grid" id="circleGrid"></div>
@@ -165,6 +219,30 @@
           <h2>Actos que ya merecen ser contados.</h2>
         </div>
         <div class="diary-list" id="diaryList"></div>
+      </section>
+
+      <section class="pilot-section" id="pilotos">
+        <div class="section-heading">
+          <p class="eyebrow">Pilotos iniciales</p>
+          <h2>Arrancar chico para cuidar bien.</h2>
+        </div>
+        <div class="pilot-list">
+          <article>
+            <span>01</span>
+            <strong>Trabajo sin hacerlo solo</strong>
+            <p>Personas buscando empleo + gente que puede revisar CVs o practicar entrevistas.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <strong>Salir mas de casa</strong>
+            <p>Caminatas, bibliotecas, meriendas y planes de baja presión para recuperar movimiento.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <strong>Ciudad nueva</strong>
+            <p>Personas que se mudaron y necesitan lugares, rutinas, compañía y pertenencia.</p>
+          </article>
+        </div>
       </section>
     </main>
 

@@ -213,8 +213,32 @@ h3 {
 .section,
 .split-section,
 .diary-section,
-.result-section {
+.result-section,
+.manifesto,
+.pilot-section {
   padding: clamp(56px, 8vw, 110px) clamp(18px, 6vw, 92px);
+}
+
+.manifesto {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.75fr);
+  gap: clamp(26px, 6vw, 78px);
+  align-items: start;
+  background: #fff7ec;
+}
+
+.manifesto-points {
+  display: grid;
+  gap: 14px;
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.manifesto-points p {
+  margin: 0;
+  border-left: 4px solid var(--gold);
+  padding-left: 16px;
 }
 
 .section-heading {
@@ -224,7 +248,8 @@ h3 {
 
 .steps,
 .circle-grid,
-.diary-list {
+.diary-list,
+.act-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
@@ -232,7 +257,8 @@ h3 {
 
 .steps article,
 .circle-card,
-.diary-card {
+.diary-card,
+.act-grid article {
   min-height: 190px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -243,9 +269,15 @@ h3 {
 .steps p,
 .circle-card p,
 .diary-card p,
+.act-grid p,
 .form-note {
   color: var(--muted);
   line-height: 1.55;
+}
+
+.act-grid strong {
+  display: block;
+  font-size: 1.18rem;
 }
 
 .step-number {
@@ -307,6 +339,16 @@ select:focus {
   margin: 0 auto;
 }
 
+.share-card {
+  border: 1px solid rgba(24, 63, 58, 0.16);
+  border-radius: 8px;
+  padding: 18px;
+  background: var(--mint);
+  color: var(--green);
+  font-weight: 800;
+  line-height: 1.45;
+}
+
 .circle-card {
   display: grid;
   align-content: space-between;
@@ -351,6 +393,39 @@ select:focus {
   color: rgba(255, 255, 255, 0.76);
 }
 
+.pilot-section {
+  background: #f4f1e8;
+}
+
+.pilot-list {
+  display: grid;
+  gap: 12px;
+}
+
+.pilot-list article {
+  display: grid;
+  grid-template-columns: 54px minmax(170px, 0.32fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  border-top: 1px solid var(--line);
+  padding: 18px 0;
+}
+
+.pilot-list span {
+  color: var(--coral);
+  font-weight: 900;
+}
+
+.pilot-list strong {
+  font-size: 1.15rem;
+}
+
+.pilot-list p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
 .footer {
   padding: 24px clamp(18px, 6vw, 92px);
   background: #101816;
@@ -367,7 +442,8 @@ select:focus {
   }
 
   .hero,
-  .split-section {
+  .split-section,
+  .manifesto {
     grid-template-columns: 1fr;
   }
 
@@ -377,8 +453,17 @@ select:focus {
 
   .steps,
   .circle-grid,
-  .diary-list {
+  .diary-list,
+  .act-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pilot-list article {
+    grid-template-columns: 44px 1fr;
+  }
+
+  .pilot-list p {
+    grid-column: 2;
   }
 }
 
@@ -402,7 +487,8 @@ select:focus {
 
   .steps,
   .circle-grid,
-  .diary-list {
+  .diary-list,
+  .act-grid {
     grid-template-columns: 1fr;
   }
 }
