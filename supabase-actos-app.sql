@@ -17,7 +17,7 @@ create table if not exists public.acts (
   availability text,
   purpose text,
   match_mode text not null default 'individual',
-  safety_preference text not null default 'sin_preferencia',
+  safety_preference text not null default 'indistinto',
   status text not null default 'active',
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
@@ -30,7 +30,14 @@ alter table public.acts
 add column if not exists match_mode text not null default 'individual';
 
 alter table public.acts
-add column if not exists safety_preference text not null default 'sin_preferencia';
+add column if not exists safety_preference text not null default 'indistinto';
+
+alter table public.acts
+alter column safety_preference set default 'indistinto';
+
+update public.acts
+set safety_preference = 'indistinto'
+where safety_preference in ('sin_preferencia', 'solo_mujeres');
 
 create table if not exists public.conversations (
   id uuid primary key default gen_random_uuid(),
@@ -181,8 +188,10 @@ as $$
   where a.user_id <> auth.uid()
     and a.status = 'active'
     and (a.match_mode = my_act.match_mode or a.match_mode = 'ambos' or my_act.match_mode = 'ambos')
-    and (a.safety_preference <> 'solo_mujeres' or me.gender = 'mujer')
-    and (my_act.safety_preference <> 'solo_mujeres' or p.gender = 'mujer')
+    and (
+      (a.safety_preference <> 'mismo_genero' and my_act.safety_preference <> 'mismo_genero')
+      or p.gender = me.gender
+    )
     and (
       a.offer = my_act.need
       or a.need = my_act.offer
@@ -243,13 +252,14 @@ begin
     raise exception 'Match mode is not compatible';
   end if;
 
-  if other_act.safety_preference = 'solo_mujeres'
-    and not exists (select 1 from public.profiles where id = auth.uid() and gender = 'mujer') then
-    raise exception 'Safety preference does not allow this match';
-  end if;
-
-  if my_act.safety_preference = 'solo_mujeres'
-    and not exists (select 1 from public.profiles where id = other_act.user_id and gender = 'mujer') then
+  if (other_act.safety_preference = 'mismo_genero' or my_act.safety_preference = 'mismo_genero')
+    and not exists (
+      select 1
+      from public.profiles me
+      join public.profiles other_profile on other_profile.id = other_act.user_id
+      where me.id = auth.uid()
+        and me.gender = other_profile.gender
+    ) then
     raise exception 'Safety preference does not allow this match';
   end if;
 

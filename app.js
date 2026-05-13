@@ -19,11 +19,9 @@ const labels = {
   circulo: "círculo grupal",
   ambos: "individual o círculo",
   mujer: "mujer",
-  varon: "varón",
-  no_binario: "no binario",
-  prefiero_no_decir: "prefiere no decir",
-  solo_mujeres: "sólo mujeres",
-  sin_preferencia: "sin preferencia",
+  hombre: "hombre",
+  mismo_genero: "mismo género",
+  indistinto: "indistinto",
 };
 
 const circles = [
@@ -93,6 +91,9 @@ const messageBody = document.querySelector("#messageBody");
 const sendMessage = document.querySelector("#sendMessage");
 const refreshChat = document.querySelector("#refreshChat");
 const chatTitle = document.querySelector("#chatTitle");
+const passwordForm = document.querySelector("#passwordForm");
+const newPassword = document.querySelector("#newPassword");
+const passwordStatus = document.querySelector("#passwordStatus");
 const circleGrid = document.querySelector("#circleGrid");
 const diaryList = document.querySelector("#diaryList");
 const navAccess = document.querySelector("#navAccess");
@@ -314,7 +315,7 @@ async function loadProfileAndAct() {
   byId("availability").value = currentAct?.availability || "";
   byId("purpose").value = currentAct?.purpose || "";
   byId("matchMode").value = currentAct?.match_mode || "";
-  byId("safetyPreference").value = currentAct?.safety_preference || "sin_preferencia";
+  byId("safetyPreference").value = currentAct?.safety_preference || "indistinto";
   byId("needStory").value = currentAct?.need_story || "";
 
   setStatus(currentAct ? "Guardado" : "Nuevo perfil", currentAct ? "ok" : "neutral");
@@ -469,6 +470,27 @@ async function sendChatMessage(event) {
   }
 }
 
+async function changePassword(event) {
+  event.preventDefault();
+  const password = newPassword.value;
+
+  if (password.length < 6) {
+    passwordStatus.textContent = "La contraseña tiene que tener al menos 6 caracteres.";
+    return;
+  }
+
+  passwordStatus.textContent = "Actualizando contraseña...";
+  const { error } = await db.auth.updateUser({ password });
+
+  if (error) {
+    passwordStatus.textContent = "No pudimos cambiarla. Probá de nuevo.";
+    return;
+  }
+
+  newPassword.value = "";
+  passwordStatus.textContent = "Contraseña actualizada. Ya podés usarla en otros dispositivos.";
+}
+
 authForm.addEventListener("submit", handleAuth);
 createAccount.addEventListener("click", handleCreateAccount);
 magicLink.addEventListener("click", sendMagicLink);
@@ -476,6 +498,7 @@ profileForm.addEventListener("submit", saveProfile);
 refreshMatches.addEventListener("click", loadMatches);
 refreshChat.addEventListener("click", loadMessages);
 messageForm.addEventListener("submit", sendChatMessage);
+passwordForm.addEventListener("submit", changePassword);
 signOut.addEventListener("click", async () => {
   await db.auth.signOut();
   currentUser = null;

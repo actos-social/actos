@@ -10,9 +10,9 @@
     <meta name="theme-color" content="#183f3a" />
     <title>Actos</title>
     <link rel="manifest" href="manifest.webmanifest" />
-    <link rel="stylesheet" href="styles.css?v=1.4" />
+    <link rel="stylesheet" href="styles.css?v=1.5" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="app.js?v=1.4" defer></script>
+    <script src="app.js?v=1.5" defer></script>
   </head>
   <body>
     <header class="app-header">
@@ -120,9 +120,7 @@
                   <select id="gender" required>
                     <option value="">Elegí una opción</option>
                     <option value="mujer">Mujer</option>
-                    <option value="varon">Varón</option>
-                    <option value="no_binario">No binario</option>
-                    <option value="prefiero_no_decir">Prefiero no decir</option>
+                    <option value="hombre">Hombre</option>
                   </select>
                 </label>
                 <label>
@@ -181,8 +179,8 @@
                 <label class="full-span">
                   Preferencia de seguridad
                   <select id="safetyPreference" required>
-                    <option value="sin_preferencia">Sin preferencia</option>
-                    <option value="solo_mujeres">Prefiero que me matchee sólo con mujeres</option>
+                    <option value="indistinto">Me es indistinto</option>
+                    <option value="mismo_genero">Prefiero matchear con personas de mi mismo género</option>
                   </select>
                 </label>
                 <label class="full-span">
@@ -200,6 +198,20 @@
                 Filtro Actos: si es salud, autonomía, pertenencia, oportunidad o cuidado, entra.
                 Si es “me da fiaca”, te queremos, pero no va por acá. La seguridad personal siempre se respeta.
               </p>
+            </div>
+
+            <div class="panel-card">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Cuenta</p>
+                  <h3>Cambiar contraseña</h3>
+                </div>
+              </div>
+              <form id="passwordForm" class="message-form">
+                <input id="newPassword" type="password" placeholder="Nueva contraseña, mínimo 6 caracteres" autocomplete="new-password" />
+                <button class="button primary" type="submit">Cambiar</button>
+              </form>
+              <p class="form-note" id="passwordStatus"></p>
             </div>
 
             <div class="panel-card">
